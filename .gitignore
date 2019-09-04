@@ -1,9 +1,3 @@
- 
-# ================== #
-# Sound Editor App   #
-# ================== #
-SoundEditor/node_modules
-SoundEditor/build/
 
 # Windows image file caches
 Thumbs.db
@@ -54,7 +48,6 @@ Temporary Items
 .apdisk
 
 
-
 # =============== #
 # Unity generated #
 # =============== #
@@ -63,6 +56,7 @@ Temporary Items
 [Uu]nityGenerated/
 [Ll]ibrary/
 [Bb]uild/
+[Bb]uilds/
 [Mm]ockups/
 sysinfo.txt
 *.stackdump
