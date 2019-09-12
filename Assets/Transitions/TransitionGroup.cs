@@ -5,13 +5,16 @@ using UnityEngine;
 public class TransitionGroup : MonoBehaviour
 {
     public TransitionScriptableObject[] transitions;
+    public bool visibleAnchor;
     public TransitionAnchor[] transitionAnchors;
     [Space(10)]
     public AnimatedAudio animatedAudio;
     public GameObject transitionCube;
     [Space(10)]
+    public bool visibleTrigger;
     public TransitionTrigger startTransitionTrigger;
     public TransitionTrigger endTransitionTrigger;
+    public GameObject turnGraphic;
 
     public Dictionary<EnvironmentType, TransitionScriptableObject> envToTransitionObject = new Dictionary<EnvironmentType, TransitionScriptableObject>();
     public Dictionary<EnvironmentType, TransitionAnchor> envToTransitionAnchor = new Dictionary<EnvironmentType, TransitionAnchor>();
@@ -41,11 +44,21 @@ public class TransitionGroup : MonoBehaviour
         foreach (TransitionAnchor tran in transitionAnchors)
         {
             envToTransitionAnchor.Add(tran.toEnvironment, tran);
+            if (!visibleAnchor)
+            {
+                tran.gameObject.SetActive(false);
+            }
         }
 
         transitionCubeMaterial = transitionCube.GetComponent<Renderer>().sharedMaterial;
         transitionCubeMaterial.color = Color.black;
         transitionCube.SetActive(true);
+
+        if (!visibleTrigger)
+        {
+            startTransitionTrigger.GetComponent<MeshRenderer>().enabled = false;
+            endTransitionTrigger.GetComponent<MeshRenderer>().enabled = false;
+        }
 
         Reset();
     }
@@ -66,22 +79,25 @@ public class TransitionGroup : MonoBehaviour
         if (skipFade)
         {
             EventBus.TransitionStarted.Invoke();
-            CalibrationManager.Instance.DisplayInfoText("Transition to " + currentTransitionToEnv.ToString() + " starts!");
+            turnGraphic.SetActive(true);
+            Debug.Log("Transition to " + currentTransitionToEnv.ToString() + " starts!");
         }
         else
         {
             LTDescr tween = FadeInTransitionCube(envToTransitionObject[env].interiorColor);
             tween.setOnComplete(() => {
                 EventBus.TransitionStarted.Invoke();
-                CalibrationManager.Instance.DisplayInfoText("Transition to " + currentTransitionToEnv.ToString() + " starts!");
+                turnGraphic.SetActive(true);
+                Debug.Log("Transition to " + currentTransitionToEnv.ToString() + " starts!");
             });
         }
     }
 
     // Called by ChateauSceneManager
-    public void EndTransition()
+    public void EndTransition(bool doFadeOut=true)
     {
         animatedAudio.Stop(true, 0.5f);
+        turnGraphic.SetActive(false);
 
         if (duringTransitionCoroutine!=null)
         {
@@ -90,12 +106,26 @@ public class TransitionGroup : MonoBehaviour
         }
 
         // Fade out Transition Cube
-        LTDescr tween = FadeOutTransitionCube();
-        tween.setOnComplete(()=> {
+        if (doFadeOut)
+        {
+            LTDescr tween = FadeOutTransitionCube();
+            tween.setOnComplete(() => {
                 transitionCube.SetActive(false);
                 EventBus.TransitionEnded.Invoke();
-                CalibrationManager.Instance.DisplayInfoText("Transition to " + currentTransitionToEnv.ToString() + " ends!");
+                Debug.Log("Transition to " + currentTransitionToEnv.ToString() + " ends!");
             });
+        }
+        else
+        {
+            // fade to black
+            LeanTween.value(transitionCube, 0f, 1f, 1f)
+                .setOnUpdate((float val) => {
+                    transitionCubeMaterial.color = Color.Lerp(transitionCubeMaterial.color, Color.black, val);
+                }).setOnComplete(()=> {
+                    EventBus.TransitionEnded.Invoke();
+                    Debug.Log("Transition to " + currentTransitionToEnv.ToString() + " ends!");
+                });
+        }
     }
 
     private IEnumerator DuringTransition(float audioDuration)

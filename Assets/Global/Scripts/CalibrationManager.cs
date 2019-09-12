@@ -32,6 +32,7 @@ public class CalibrationManager : Manager<CalibrationManager>
 
     void Start()
     {
+        DisplayInfoText("Start.");
         StartCoroutine(Calibrate());
         leftSmallBall = Instantiate(smallBallPrefab, transform);
         rightSmallBall = Instantiate(smallBallPrefab, transform);

@@ -67,7 +67,7 @@ public class ChateauSceneManager : Manager<ChateauSceneManager>
     private void HandleNewSceneLoaded(string newEnv)
     {
         currentChateauScene = FindObjectOfType<ChateauScene>();
-        CalibrationManager.Instance.DisplayInfoText("Found currentChateauScene of " + currentChateauScene.gameObject.name);
+        Debug.Log("Found currentChateauScene of " + currentChateauScene.gameObject.name);
 
         //switch (newEnv)
         //{
@@ -107,11 +107,11 @@ public class ChateauSceneManager : Manager<ChateauSceneManager>
 
     private void HandleEnterEndTransitionTrigger(EnvironmentType toEnv)
     {
-        // turn off transition
-        transitionGroup.EndTransition();
-
         if (toEnv != EnvironmentType.End)
         {
+            // turn off transition
+            transitionGroup.EndTransition();
+
             // update env transformation
             currentChateauScene.UpdateTransformWithAnchor(transitionGroup.envToTransitionAnchor[toEnv].transform);
 
@@ -120,7 +120,8 @@ public class ChateauSceneManager : Manager<ChateauSceneManager>
         }
         else
         {
-            //
+            // turn off transition + fade to black 
+            transitionGroup.EndTransition(false);
         }
     }
 

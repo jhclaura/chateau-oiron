@@ -4,13 +4,17 @@ using UnityEngine;
 
 public class EyeStickyFollow : MonoBehaviour
 {
+    public bool autoFollow;
     private Quaternion newRot;
 
     void Update()
     {
-		transform.position = Camera.main.transform.position;
-        newRot = Camera.main.transform.rotation;
-        newRot.x = newRot.z = 0;
-        transform.rotation = newRot;
+        if (autoFollow)
+        {
+            transform.position = Camera.main.transform.position;
+            newRot = Camera.main.transform.rotation;
+            newRot.x = newRot.z = 0;
+            transform.rotation = newRot;
+        }
     }
 }

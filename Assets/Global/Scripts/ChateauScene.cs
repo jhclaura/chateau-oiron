@@ -13,9 +13,8 @@ public class ChateauScene : MonoBehaviour
 
     public void UpdateTransformWithAnchor(Transform referenceStartAnchor)
     {
+        transform.rotation = referenceStartAnchor.rotation * Quaternion.Inverse(startPoint.rotation);
         Vector3 childOffset = referenceStartAnchor.position - startPoint.position;
-
-        transform.rotation = referenceStartAnchor.rotation;
         transform.position += childOffset;
     }
 

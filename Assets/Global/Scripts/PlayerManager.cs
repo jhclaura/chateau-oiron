@@ -13,6 +13,10 @@ public class PlayerManager : MonoBehaviour
     void Start()
     {
         cameraTransform = Camera.main.transform;
+
+#if UNITY_EDITOR
+        VRPlatformManager.Instance.oculusCenterCamera.transform.localPosition = Vector3.up * 1.8f;
+#endif
     }
 
     void Update()
