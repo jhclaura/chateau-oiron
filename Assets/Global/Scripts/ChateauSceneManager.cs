@@ -1,15 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using NaughtyAttributes;
 
 public class ChateauSceneManager : Manager<ChateauSceneManager>
 {
     public Transform anchor;
     public Transform transitionGroupObject;
-    public EnvironmentType currentEnvironment = EnvironmentType.Fire;
+    public EnvironmentSettings environmentSettings;
+    [ReadOnly]
+    public EnvironmentType currentEnvironment;
 
-    private Dictionary<int, EnvironmentType> environmentOrderDict;
-    private int nextEnvIndex = 1;
+    private int nextEnvIndex = 0;
     private bool m_calibrationIsFinished;
     public bool CalibrationIsFinished { get { return m_calibrationIsFinished; } }
     private ChateauScene currentChateauScene;
@@ -37,14 +39,14 @@ public class ChateauSceneManager : Manager<ChateauSceneManager>
 
     void Start()
     {
-        environmentOrderDict = new Dictionary<int, EnvironmentType>()
-        {
-            { 1, EnvironmentType.Fire },
-            { 2, EnvironmentType.Water },
-            { 3, EnvironmentType.Forest },
-            { 4, EnvironmentType.Beetle },
-            { 5, EnvironmentType.End }
-        };
+        //environmentOrderDict = new Dictionary<int, EnvironmentType>()
+        //{
+        //    { 1, EnvironmentType.Fire },
+        //    { 2, EnvironmentType.Water },
+        //    { 3, EnvironmentType.Forest },
+        //    { 4, EnvironmentType.Beetle },
+        //    { 5, EnvironmentType.End }
+        //};
         transitionGroup = transitionGroupObject.GetComponent<TransitionGroup>();
 
         // Enable Opening transition cube ONLY, don't start it yet
@@ -130,9 +132,10 @@ public class ChateauSceneManager : Manager<ChateauSceneManager>
         // update TransitionGroup for next env
         nextEnvIndex++;
 
-        if (environmentOrderDict.TryGetValue(nextEnvIndex, out EnvironmentType envType))
+        if (nextEnvIndex < environmentSettings.environmentOrder.Count)
         {
-            transitionGroup.UpdateForNextEnv(envType);
+            currentEnvironment = environmentSettings.environmentOrder[nextEnvIndex].environmentType;
+            transitionGroup.UpdateForNextEnv(currentEnvironment);
         }
         else
         {
@@ -143,7 +146,7 @@ public class ChateauSceneManager : Manager<ChateauSceneManager>
             // Enable Opening transition cube ONLY, don't start it yet
             transitionGroup.FadeInTransitionCube(currentEnvironment);
             EnvironmentManager.Instance.HandleEnvironmentChange(currentEnvironment);
-            transitionGroup.UpdateForNextEnv(environmentOrderDict[nextEnvIndex]);
+            transitionGroup.UpdateForNextEnv(currentEnvironment);
             transitionGroup.Reset();
         }
     }
@@ -152,7 +155,7 @@ public class ChateauSceneManager : Manager<ChateauSceneManager>
     {
         m_calibrationIsFinished = false;
         CalibrationManager.Instance.Reset();
-        nextEnvIndex = 1;
-        currentEnvironment = EnvironmentType.Fire;
+        nextEnvIndex = 0;
+        currentEnvironment = environmentSettings.environmentOrder[nextEnvIndex].environmentType;
     }
 }

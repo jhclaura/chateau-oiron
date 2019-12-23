@@ -16,6 +16,7 @@ public class AnimatedAudio : MonoBehaviour
 	}
 	private float m_originalVolumn;
 	private int tweenId;
+    public bool IsPlaying { get { return m_targetAudio.isPlaying; } }
 
 	private void Awake()
 	{

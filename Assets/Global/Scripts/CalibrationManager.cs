@@ -10,6 +10,10 @@ public class CalibrationManager : Manager<CalibrationManager>
     public Vector3 leftControllerOffset;
     public Vector3 rightControllerOffset;
 
+    [Header("Sounds")]
+    public Monologue waitMonologue;
+    public Monologue proceedMonologue;
+
     [Header("Dev")]
     public bool devMode;
     public Transform dummyControllerLeft;
@@ -29,10 +33,13 @@ public class CalibrationManager : Manager<CalibrationManager>
     private float leftControllerPressedTime;
     private float rightControllerPressedTime;
     private WaitForSeconds controllerVibrationWait;
+    private Color infoTextColor;
+    private int emptyInfoTweenId;
 
     void Start()
     {
-        DisplayInfoText("Start.");
+        infoTextColor = infoText.color;
+        //DisplayInfoText("Start.");
         StartCoroutine(Calibrate());
         leftSmallBall = Instantiate(smallBallPrefab, transform);
         rightSmallBall = Instantiate(smallBallPrefab, transform);
@@ -125,12 +132,22 @@ public class CalibrationManager : Manager<CalibrationManager>
     IEnumerator Calibrate()
     {
         // waiting for two controller both be PRESSED
+        float timePassed = 0;
+        bool displayInfoText = false;
         while (!leftControllerIsPressed || !rightControllerIsPressed)
         {
+            timePassed += Time.deltaTime;
+            if (timePassed > 5f && !displayInfoText)
+            {
+                displayInfoText = true;
+                DisplayInfoText("Now, please press both controllers to start calibration.", 10f);
+            }
             yield return null;
         }
-        DisplayInfoText("Start calibration!", 2f);
+        DisplayInfoText("Calibration started.");
         EventBus.CalibrationStarted.Invoke();
+
+        MonologueManager.Instance.PlayNewMonoluge(waitMonologue);
 
         // after both are pressed, wait for 5 seconds
         float passedTime = 0;
@@ -145,7 +162,7 @@ public class CalibrationManager : Manager<CalibrationManager>
             rightControllerPosition = VRPlatformManager.Instance.GetControllerPosition(VRHand.Right, rightControllerOffset);
         }
 
-        while (passedTime < 5f)
+        while (passedTime < 6f)
         {
             if (devMode)
             {
@@ -165,7 +182,8 @@ public class CalibrationManager : Manager<CalibrationManager>
         leftSmallBall.SetActive(false);
         rightSmallBall.SetActive(false);
 
-        rightControllerPosition.y = leftControllerPosition.y;
+        //rightControllerPosition.y = leftControllerPosition.y;
+        rightControllerPosition.y = leftControllerPosition.y = 0;
 
         Vector3 centerPoint = (leftControllerPosition + rightControllerPosition) / 2f;
         Vector3 side1 = leftControllerPosition - centerPoint;
@@ -180,8 +198,17 @@ public class CalibrationManager : Manager<CalibrationManager>
 
         Debug.DrawRay(centerPoint, direction, Color.green, 5f);
 
-        DisplayInfoText("Finish calibration!", 2f);
+        DisplayInfoText("Calibration finished.");
         EventBus.CalibrationEnded.Invoke();
+
+        yield return new WaitForSeconds(5f);
+        DisplayInfoText("Diatom lost.\nDiatom found.\nYou are now connected to the\nlabyrinth network. Proceed with caution.", 5f);
+
+        MonologueManager.Instance.PlayNewMonoluge(proceedMonologue);
+
+        yield return new WaitForSeconds(7f);
+        infoText.gameObject.SetActive(false);
+        infoText.color = infoTextColor;
     }
 
     public void VibrateController(OVRInput.Controller controller)
@@ -205,25 +232,59 @@ public class CalibrationManager : Manager<CalibrationManager>
         yield return controllerVibrationWait;
     }
 
-    public void DisplayInfoText(string info, float duration=2f)
+    public void DisplayInfoText(string info, float duration=3f)
     {
+        //if (infoText.text != "")
+        //{
+        //    infoText.text += ("\n\n" + info);
+        //}
+        //else
+        //{
+        //    infoText.text = info;
+        //}
+        Debug.Log(info);
+        //CancelInvoke("EmptyInfoText");
+        //Invoke("EmptyInfoText", duration);
+
+        if (emptyInfoTweenId != 0 && LeanTween.isTweening(emptyInfoTweenId))
+        {
+            LeanTween.cancel(emptyInfoTweenId);
+        }
+
         if (infoText.text != "")
         {
-            infoText.text += ("\n" + info);
+            LeanTween.value(infoText.gameObject, infoText.color, Color.clear, .5f)
+                .setOnUpdate(UpdateTextColor)
+                .setOnComplete(()=> {
+                    infoText.text = info;
+                    LeanTween.value(infoText.gameObject, infoText.color, infoTextColor, 1f).setOnUpdate(UpdateTextColor);
+                });
         }
         else
         {
             infoText.text = info;
+            if (infoText.color != infoTextColor)
+            {
+                LeanTween.value(infoText.gameObject, infoText.color, infoTextColor, 1f).setOnUpdate(UpdateTextColor);
+            }
         }
-        Debug.Log(info);
 
-        CancelInvoke("EmptyInfoText");
-        Invoke("EmptyInfoText", duration);
+        EmptyInfoText(duration);
     }
 
-    private void EmptyInfoText()
+    private void EmptyInfoText(float duration)
     {
-        infoText.text = "";
+        emptyInfoTweenId = LeanTween.value(infoText.gameObject, infoText.color, Color.clear, .5f)
+            .setDelay(duration)
+            .setOnUpdate(UpdateTextColor)
+            .setOnComplete(()=> {
+                infoText.text = "";
+            }).id;
+    }
+
+    private void UpdateTextColor(Color col)
+    {
+        infoText.color = col;
     }
 
     private bool CheckIfPressingController(VRHand hand)
@@ -260,7 +321,8 @@ public class CalibrationManager : Manager<CalibrationManager>
         rightControllerIsPressed = false;
         leftSmallBall.SetActive(true);
         rightSmallBall.SetActive(true);
-
+        infoText.gameObject.SetActive(true);
+        DisplayInfoText("Please wait while the diatom connects you to the labyrinth network.", 10f);
         StartCoroutine(Calibrate());
     }
 }

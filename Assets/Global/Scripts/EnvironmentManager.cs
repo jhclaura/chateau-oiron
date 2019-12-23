@@ -3,11 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using NaughtyAttributes;
 
 public enum EnvironmentType
 {
-    Fire,
     Water,
+    Fire,
     Forest,
     Beetle,
     End
@@ -28,40 +29,48 @@ public struct EnvironmentColor
 public class EnvironmentManager : Manager<EnvironmentManager>
 {
     private EnvironmentType currentEnvironment;// = EnvironmentType.Fire;
+    public EnvironmentSettings environmentSettings;
     public Material skyboxMaterial;
-    public EnvironmentColor[] environmentColors;
+	//public EnvironmentColor[] environmentColors;
 
     private bool isLoading;
     private OVRScreenFade oVRScreenFade;
-    private Dictionary<EnvironmentType, string> environmentSceneNameDictionary;
-    private Dictionary<string, EnvironmentType> environmentTypeDictionary;
-    private Dictionary<EnvironmentType, EnvironmentColor> environmentColorDictionary;
+    private Dictionary<EnvironmentType, Environment> environmentDictionary;
+    //private Dictionary<EnvironmentType, string> environmentSceneNameDictionary;
+    //private Dictionary<string, EnvironmentType> environmentTypeDictionary;
+    //private Dictionary<EnvironmentType, EnvironmentColor> environmentColorDictionary;
 
     void Awake()
     {
-        environmentSceneNameDictionary = new Dictionary<EnvironmentType, string>()
+        environmentDictionary = new Dictionary<EnvironmentType, Environment>();
+        foreach(Environment env in environmentSettings.environmentOrder)
         {
-            { EnvironmentType.Fire, "Scene_fire" },
-            { EnvironmentType.Water, "Scene_water" },
-            { EnvironmentType.Forest, "Scene_forest" },
-            { EnvironmentType.Beetle, "Scene_beetle" }
-        };
+            environmentDictionary.Add(env.environmentType, env);
+        }
 
-        environmentTypeDictionary = new Dictionary<string, EnvironmentType>()
-        {
-            { "fire", EnvironmentType.Fire },
-            { "water", EnvironmentType.Water },
-            { "forest", EnvironmentType.Forest },
-            { "beetle", EnvironmentType.Beetle }
-        };
+        //environmentSceneNameDictionary = new Dictionary<EnvironmentType, string>()
+        //{
+        //    { EnvironmentType.Fire, "Scene_fire" },
+        //    { EnvironmentType.Water, "Scene_water" },
+        //    { EnvironmentType.Forest, "Scene_forest" },
+        //    { EnvironmentType.Beetle, "Scene_beetle" }
+        //};
 
-        environmentColorDictionary = new Dictionary<EnvironmentType, EnvironmentColor>()
-        {
-            { EnvironmentType.Fire, environmentColors[0] },
-            { EnvironmentType.Water, environmentColors[1] },
-            { EnvironmentType.Forest, environmentColors[2] },
-            { EnvironmentType.Beetle, environmentColors[3] }
-        };
+        //environmentTypeDictionary = new Dictionary<string, EnvironmentType>()
+        //{
+        //    { "fire", EnvironmentType.Fire },
+        //    { "water", EnvironmentType.Water },
+        //    { "forest", EnvironmentType.Forest },
+        //    { "beetle", EnvironmentType.Beetle }
+        //};
+
+        //environmentColorDictionary = new Dictionary<EnvironmentType, EnvironmentColor>()
+        //{
+        //    { EnvironmentType.Fire, environmentColors[0] },
+        //    { EnvironmentType.Water, environmentColors[1] },
+        //    { EnvironmentType.Forest, environmentColors[2] },
+        //    { EnvironmentType.Beetle, environmentColors[3] }
+        //};
 
         oVRScreenFade = VRPlatformManager.Instance.oculusCenterCamera.GetComponent<OVRScreenFade>();
     }
@@ -79,7 +88,7 @@ public class EnvironmentManager : Manager<EnvironmentManager>
     public void LoadScene(EnvironmentType newEnv)
     {
         currentEnvironment = newEnv;
-        SceneManager.LoadSceneAsync(environmentSceneNameDictionary[currentEnvironment], LoadSceneMode.Additive);
+        SceneManager.LoadSceneAsync(environmentDictionary[currentEnvironment].sceneName, LoadSceneMode.Additive);
         UpdateEnvironmentColors();
     }
 
@@ -92,20 +101,20 @@ public class EnvironmentManager : Manager<EnvironmentManager>
         StartCoroutine(LoadEnvironmentSceneAsync(newEnvType));
     }
 
-    public void HandleEnvironmentChange(string newEnv)
-    {
-        HandleEnvironmentChange(environmentTypeDictionary[newEnv]);
-    }
+    //public void HandleEnvironmentChange(string newEnv)
+    //{
+    //    HandleEnvironmentChange(environmentTypeDictionary[newEnv]);
+    //}
 
     IEnumerator LoadEnvironmentSceneAsync(EnvironmentType newEnv)
     {
-        FadeOut(environmentColorDictionary[currentEnvironment].cameraFadeOutColor);
+        FadeOut(environmentDictionary[currentEnvironment].cameraFadeOutColor);
         yield return new WaitForSeconds(1f);
 
         // Unload
-        if (environmentSceneNameDictionary.ContainsKey(currentEnvironment))
+        if (environmentDictionary.ContainsKey(currentEnvironment))
         {
-            AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync(environmentSceneNameDictionary[currentEnvironment]);
+            AsyncOperation asyncUnload = SceneManager.UnloadSceneAsync(environmentDictionary[currentEnvironment].sceneName);
             // wait until the async scene fully unloads
             while (!asyncUnload.isDone)
             {
@@ -117,7 +126,9 @@ public class EnvironmentManager : Manager<EnvironmentManager>
         }
 
         // Load
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(environmentSceneNameDictionary[newEnv], LoadSceneMode.Additive);
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(environmentDictionary[newEnv].sceneName, LoadSceneMode.Additive);
+        currentEnvironment = newEnv;
+
         // wait until the async scene fully loads
         while (!asyncLoad.isDone)
         {
@@ -125,13 +136,13 @@ public class EnvironmentManager : Manager<EnvironmentManager>
         }
 
         // Call event
-        currentEnvironment = newEnv;
         
 
         // change env colors
         UpdateEnvironmentColors();
 
         // Scene load! fade in camera view
+        yield return new WaitForSeconds(0.5f);
         FadeIn();
 
         isLoading = false;
@@ -140,7 +151,7 @@ public class EnvironmentManager : Manager<EnvironmentManager>
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (scene.name == "_BaseScene") return;
-        string envName = GetEnvrionmentName(currentEnvironment);       
+        string envName = currentEnvironment.ToString();       
         EventBus.NewSceneLoaded.Invoke(envName);
     }
 
@@ -158,27 +169,27 @@ public class EnvironmentManager : Manager<EnvironmentManager>
         //    RenderSettings.fog = false;
         //}
 
-        EnvironmentColor colors = environmentColorDictionary[currentEnvironment];
+        Environment env = environmentDictionary[currentEnvironment];
 
-        skyboxMaterial.SetColor("_Color2", colors.skyColors[0]);
-        skyboxMaterial.SetColor("_Color1", colors.skyColors[1]);
-        RenderSettings.ambientSkyColor = colors.ambientColors[0];
-        RenderSettings.ambientEquatorColor = colors.ambientColors[0];
-        RenderSettings.ambientGroundColor = colors.ambientColors[0];
+        skyboxMaterial.SetColor("_Color2", env.skyColors[0]);
+        skyboxMaterial.SetColor("_Color1", env.skyColors[1]);
+        RenderSettings.ambientSkyColor = env.ambientColors[0];
+        RenderSettings.ambientEquatorColor = env.ambientColors[0];
+        RenderSettings.ambientGroundColor = env.ambientColors[0];
 
     }
 
-    public string GetEnvrionmentName(EnvironmentType env)
-    {
-        if (environmentSceneNameDictionary.TryGetValue(env, out string envName))
-        {
-            return envName;
-        }
-        else
-        {
-            return "";
-        }
-    }
+    //public string GetEnvrionmentName(EnvironmentType env)
+    //{
+    //    if (environmentSceneNameDictionary.TryGetValue(env, out string envName))
+    //    {
+    //        return envName;
+    //    }
+    //    else
+    //    {
+    //        return "";
+    //    }
+    //}
 
     public void FadeOut(Color fadeColor, float fadeTime = 1f)
     {

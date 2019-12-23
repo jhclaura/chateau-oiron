@@ -6,18 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/_BaseScene.unity
+    path: Assets/_Scenes/_BaseScene.unity
     guid: db8bfc59b2f6c4fac8382ee5b3793c4d
   - enabled: 1
-    path: Assets/Scenes/Scene_fire.unity
+    path: Assets/_Scenes/Scene_fire.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
-    path: Assets/Scenes/Scene_water.unity
+    path: Assets/_Scenes/Scene_water.unity
     guid: e9940afa16bb4419fb5e939e745e9edd
   - enabled: 1
-    path: Assets/Scenes/Scene_forest.unity
+    path: Assets/_Scenes/Scene_forest.unity
     guid: ec6eedad6e3ec4dfbb7230b4704d9ff9
   - enabled: 1
-    path: Assets/Scenes/Scene_beetle.unity
+    path: Assets/_Scenes/Scene_beetle.unity
     guid: 48a50a1af27a244838f99aa9536f5a3a
   m_configObjects: {}
