@@ -28,7 +28,8 @@ public struct EnvironmentColor
 
 public class EnvironmentManager : Manager<EnvironmentManager>
 {
-    private EnvironmentType currentEnvironment;// = EnvironmentType.Fire;
+    [ReadOnly]
+    public EnvironmentType currentEnvironment;// = EnvironmentType.Fire;
     public EnvironmentSettings environmentSettings;
     public Material skyboxMaterial;
 	//public EnvironmentColor[] environmentColors;
@@ -47,30 +48,6 @@ public class EnvironmentManager : Manager<EnvironmentManager>
         {
             environmentDictionary.Add(env.environmentType, env);
         }
-
-        //environmentSceneNameDictionary = new Dictionary<EnvironmentType, string>()
-        //{
-        //    { EnvironmentType.Fire, "Scene_fire" },
-        //    { EnvironmentType.Water, "Scene_water" },
-        //    { EnvironmentType.Forest, "Scene_forest" },
-        //    { EnvironmentType.Beetle, "Scene_beetle" }
-        //};
-
-        //environmentTypeDictionary = new Dictionary<string, EnvironmentType>()
-        //{
-        //    { "fire", EnvironmentType.Fire },
-        //    { "water", EnvironmentType.Water },
-        //    { "forest", EnvironmentType.Forest },
-        //    { "beetle", EnvironmentType.Beetle }
-        //};
-
-        //environmentColorDictionary = new Dictionary<EnvironmentType, EnvironmentColor>()
-        //{
-        //    { EnvironmentType.Fire, environmentColors[0] },
-        //    { EnvironmentType.Water, environmentColors[1] },
-        //    { EnvironmentType.Forest, environmentColors[2] },
-        //    { EnvironmentType.Beetle, environmentColors[3] }
-        //};
 
         oVRScreenFade = VRPlatformManager.Instance.oculusCenterCamera.GetComponent<OVRScreenFade>();
     }

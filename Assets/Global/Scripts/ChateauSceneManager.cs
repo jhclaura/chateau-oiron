@@ -11,6 +11,9 @@ public class ChateauSceneManager : Manager<ChateauSceneManager>
     [ReadOnly]
     public EnvironmentType currentEnvironment;
 
+    [Space(10)]
+    public bool restartAfterEnd;
+
     private int nextEnvIndex = 0;
     private bool m_calibrationIsFinished;
     public bool CalibrationIsFinished { get { return m_calibrationIsFinished; } }
@@ -52,6 +55,8 @@ public class ChateauSceneManager : Manager<ChateauSceneManager>
         // Enable Opening transition cube ONLY, don't start it yet
         transitionGroup.FadeInTransitionCube(currentEnvironment);
         EnvironmentManager.Instance.LoadScene(currentEnvironment);
+
+        CalibrationManager.Instance.StartCalibration();
     }
 
     private void HandleCalibrationStart()
@@ -64,6 +69,11 @@ public class ChateauSceneManager : Manager<ChateauSceneManager>
     {
         Debug.Log("Handle Calibration End!");
         m_calibrationIsFinished = true;
+
+        // update Transition Group transform
+        transitionGroup.UpdateAfterCalibrationEnd();
+        // update env transformation
+        currentChateauScene.UpdateTransformWithAnchor(transitionGroup.envToTransitionAnchor[EnvironmentManager.Instance.currentEnvironment].transform);
     }
 
     private void HandleNewSceneLoaded(string newEnv)
@@ -83,17 +93,13 @@ public class ChateauSceneManager : Manager<ChateauSceneManager>
 
         //        break;
         //}
+
+        // update env transformation
+        currentChateauScene.UpdateTransformWithAnchor(transitionGroup.envToTransitionAnchor[EnvironmentManager.Instance.currentEnvironment].transform);
     }
 
     private void HandleEnterStartTransitionTrigger(EnvironmentType toEnv)
     {
-        //if (toEnv==EnvironmentType.Fire)
-        //{
-        //    // special case for Opening => start Fire scene by manually call EnterEndTransitionTrigger
-        //    transitionGroup.HandleEnterEndTransitionTrigger(toEnv);
-        //    return;
-        //}
-
         // turn off currentEnv
         currentChateauScene.DeactivateScene();
 
@@ -115,7 +121,7 @@ public class ChateauSceneManager : Manager<ChateauSceneManager>
             transitionGroup.EndTransition();
 
             // update env transformation
-            currentChateauScene.UpdateTransformWithAnchor(transitionGroup.envToTransitionAnchor[toEnv].transform);
+            //currentChateauScene.UpdateTransformWithAnchor(transitionGroup.envToTransitionAnchor[toEnv].transform);
 
             // turn on env
             currentChateauScene.ActivateScene();
@@ -140,22 +146,29 @@ public class ChateauSceneManager : Manager<ChateauSceneManager>
         else
         {
             // End ends!!!
-            // TEMP: restart
-            Reset();
-
-            // Enable Opening transition cube ONLY, don't start it yet
-            transitionGroup.FadeInTransitionCube(currentEnvironment);
-            EnvironmentManager.Instance.HandleEnvironmentChange(currentEnvironment);
-            transitionGroup.UpdateForNextEnv(currentEnvironment);
-            transitionGroup.Reset();
+            if(restartAfterEnd)
+            {
+                Reset();
+                Restart();
+            }
         }
     }
 
     private void Reset()
     {
         m_calibrationIsFinished = false;
-        CalibrationManager.Instance.Reset();
         nextEnvIndex = 0;
         currentEnvironment = environmentSettings.environmentOrder[nextEnvIndex].environmentType;
+
+        CalibrationManager.Instance.Reset();
+        CalibrationManager.Instance.StartCalibration();
+    }
+
+    private void Restart()
+    {
+        transitionGroup.FadeInTransitionCube(currentEnvironment);
+        EnvironmentManager.Instance.HandleEnvironmentChange(currentEnvironment);
+        transitionGroup.UpdateForNextEnv(currentEnvironment);
+        transitionGroup.Reset();
     }
 }

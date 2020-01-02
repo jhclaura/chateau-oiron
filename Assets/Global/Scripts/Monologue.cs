@@ -14,7 +14,7 @@ public class Monologue : MonoBehaviour
 
         if (other.gameObject.CompareTag("Player"))
         {
-            MonologueManager.Instance.PlayNewMonoluge(this);
+            MonologueManager.Instance.Play(this);
             isPlayed = true;
         }
     }

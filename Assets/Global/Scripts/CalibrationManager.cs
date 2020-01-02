@@ -39,8 +39,7 @@ public class CalibrationManager : Manager<CalibrationManager>
     void Start()
     {
         infoTextColor = infoText.color;
-        //DisplayInfoText("Start.");
-        StartCoroutine(Calibrate());
+        //DisplayInfoText("Start.");        
         leftSmallBall = Instantiate(smallBallPrefab, transform);
         rightSmallBall = Instantiate(smallBallPrefab, transform);
         controllerVibrationWait = new WaitForSeconds(0.2f);
@@ -79,21 +78,6 @@ public class CalibrationManager : Manager<CalibrationManager>
             {
                 leftControllerPressedTime = 0;
             }
-
-            //if (OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.LTouch) || OVRInput.Get(OVRInput.Button.PrimaryHandTrigger, OVRInput.Controller.LTouch))
-            //{
-            //    leftControllerPressedTime += Time.deltaTime;
-            //    if (leftControllerPressedTime > 1f)
-            //    {
-            //        leftControllerIsPressed = true;
-            //        VibrateController(OVRInput.Controller.LTouch);
-            //    }
-            //}
-            //else if (!OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.LTouch) && !OVRInput.Get(OVRInput.Button.PrimaryHandTrigger, OVRInput.Controller.LTouch))
-            //{
-            //    leftControllerPressedTime = 0;
-            //}
-
         }
 
         if (!rightControllerIsPressed)
@@ -112,21 +96,12 @@ public class CalibrationManager : Manager<CalibrationManager>
             {
                 rightControllerPressedTime = 0;
             }
-
-            //if (OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.RTouch) || OVRInput.Get(OVRInput.Button.PrimaryHandTrigger, OVRInput.Controller.RTouch))
-            //{
-            //    rightControllerPressedTime += Time.deltaTime;
-            //    if (leftControllerPressedTime > 1f)
-            //    {
-            //        rightControllerIsPressed = true;
-            //        VibrateController(OVRInput.Controller.RTouch);
-            //    }
-            //}
-            //else if (!OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.RTouch) && !OVRInput.Get(OVRInput.Button.PrimaryHandTrigger, OVRInput.Controller.RTouch))
-            //{
-            //    rightControllerPressedTime = 0;
-            //}
         }
+    }
+
+    public void StartCalibration()
+    {
+        StartCoroutine(Calibrate());
     }
 
     IEnumerator Calibrate()
@@ -147,7 +122,7 @@ public class CalibrationManager : Manager<CalibrationManager>
         DisplayInfoText("Calibration started.");
         EventBus.CalibrationStarted.Invoke();
 
-        MonologueManager.Instance.PlayNewMonoluge(waitMonologue);
+        MonologueManager.Instance.Play(waitMonologue);
 
         // after both are pressed, wait for 5 seconds
         float passedTime = 0;
@@ -182,7 +157,6 @@ public class CalibrationManager : Manager<CalibrationManager>
         leftSmallBall.SetActive(false);
         rightSmallBall.SetActive(false);
 
-        //rightControllerPosition.y = leftControllerPosition.y;
         rightControllerPosition.y = leftControllerPosition.y = 0;
 
         Vector3 centerPoint = (leftControllerPosition + rightControllerPosition) / 2f;
@@ -194,7 +168,7 @@ public class CalibrationManager : Manager<CalibrationManager>
         startAnchor.position = centerPoint;
         startAnchor.rotation = Quaternion.LookRotation(direction);
 
-        GameObject newForward = Instantiate(forwardPrefab, centerPoint, Quaternion.LookRotation(direction), environmentHolder);
+        //GameObject newForward = Instantiate(forwardPrefab, centerPoint, Quaternion.LookRotation(direction), environmentHolder);
 
         Debug.DrawRay(centerPoint, direction, Color.green, 5f);
 
@@ -204,7 +178,7 @@ public class CalibrationManager : Manager<CalibrationManager>
         yield return new WaitForSeconds(5f);
         DisplayInfoText("Diatom lost.\nDiatom found.\nYou are now connected to the\nlabyrinth network. Proceed with caution.", 5f);
 
-        MonologueManager.Instance.PlayNewMonoluge(proceedMonologue);
+        MonologueManager.Instance.Play(proceedMonologue);
 
         yield return new WaitForSeconds(7f);
         infoText.gameObject.SetActive(false);
@@ -323,6 +297,5 @@ public class CalibrationManager : Manager<CalibrationManager>
         rightSmallBall.SetActive(true);
         infoText.gameObject.SetActive(true);
         DisplayInfoText("Please wait while the diatom connects you to the labyrinth network.", 10f);
-        StartCoroutine(Calibrate());
     }
 }

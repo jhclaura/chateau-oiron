@@ -13,12 +13,12 @@ public class MonologueManager : Manager<MonologueManager>
         fadeDelay = new WaitForSeconds(0.55f);
     }
 
-    public void PlayNewMonoluge(Monologue newMonologue)
+    public void Play(Monologue newMonologue)
     {
-        StartCoroutine(FadeOutFadeInMonolgue(newMonologue));
+        StartCoroutine(FadeIn(newMonologue));
     }
 
-    IEnumerator FadeOutFadeInMonolgue(Monologue newMonologue)
+    IEnumerator FadeIn(Monologue newMonologue)
     {
         if (monoluge.IsPlaying)
         {

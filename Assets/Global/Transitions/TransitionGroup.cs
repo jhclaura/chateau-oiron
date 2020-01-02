@@ -12,8 +12,7 @@ public class TransitionGroup : MonoBehaviour
     public TransitionAnchor[] transitionAnchors;
 
     [Space(10)]
-    public AnimatedAudio animatedAudio;
-    public Monologue diatome;
+    public Monologue monologue;
     public GameObject transitionCube;
 
     [Space(10)]
@@ -30,6 +29,7 @@ public class TransitionGroup : MonoBehaviour
     private EnvironmentType currentTransitionToEnv;
     private Material transitionCubeMaterial;
     private IEnumerator duringTransitionCoroutine;
+    private AnimatedAudio animatedAudio;
 
     private void OnEnable()
     {
@@ -68,6 +68,8 @@ public class TransitionGroup : MonoBehaviour
             endTransitionTrigger.GetComponent<MeshRenderer>().enabled = false;
         }
 
+        animatedAudio = monologue.GetComponent<AnimatedAudio>();
+
         Reset();
     }
 
@@ -78,8 +80,6 @@ public class TransitionGroup : MonoBehaviour
 
         animatedAudio.TargetAudio.clip = envToTransitionObject[env].audioClip;
         animatedAudio.ToggleOn();
-
-       
 
         // Start waiting for transition to end, if not ended by User (by walking out of transition)
         duringTransitionCoroutine = DuringTransition(envToTransitionObject[env].audioClip.length);
@@ -96,9 +96,10 @@ public class TransitionGroup : MonoBehaviour
         else // Fade in Transition Cube
         {
             LTDescr tween = FadeInTransitionCube(envToTransitionObject[env].interiorColor);
-            tween.setOnComplete(() => {
+            tween.setOnComplete(() =>
+            {
                 EventBus.TransitionStarted.Invoke();
-                if (env==EnvironmentType.Forest)
+                if (env == EnvironmentType.Forest)
                 {
                     turnGraphic.SetActive(true);
                     turnText.gameObject.SetActive(true);
@@ -107,12 +108,12 @@ public class TransitionGroup : MonoBehaviour
                 {
                     frontText.gameObject.SetActive(true);
                 }
-                
+
                 Debug.Log("Transition to " + currentTransitionToEnv.ToString() + " starts!");
             });
         }
 
-        if(currentTransitionToEnv == EnvironmentType.End)
+        if (currentTransitionToEnv == EnvironmentType.End)
         {
             frontText.text = "Closing starts. Proceed to end it.";
             frontText.color = Color.white;
@@ -127,12 +128,12 @@ public class TransitionGroup : MonoBehaviour
                 frontText.text = "Diatom lost.\nDiatom found.\nYou are now connected to the\nlabyrinth network.\nProceed with caution.";
 
             // diatome lost
-            MonologueManager.Instance.PlayNewMonoluge(diatome);
+            MonologueManager.Instance.Play(monologue);
         }
     }
 
     // Called by ChateauSceneManager
-    public void EndTransition(bool doFadeOut=true)
+    public void EndTransition(bool doFadeOut = true)
     {
         animatedAudio.Stop(true, 0.5f);
         turnGraphic.SetActive(false);
@@ -144,7 +145,7 @@ public class TransitionGroup : MonoBehaviour
             frontText.gameObject.SetActive(false);
         }
 
-        if (duringTransitionCoroutine!=null)
+        if (duringTransitionCoroutine != null)
         {
             StopCoroutine(duringTransitionCoroutine);
             duringTransitionCoroutine = null;
@@ -154,7 +155,8 @@ public class TransitionGroup : MonoBehaviour
         if (doFadeOut)
         {
             LTDescr tween = FadeOutTransitionCube();
-            tween.setOnComplete(() => {
+            tween.setOnComplete(() =>
+            {
                 transitionCube.SetActive(false);
                 EventBus.TransitionEnded.Invoke();
                 Debug.Log("Transition to " + currentTransitionToEnv.ToString() + " ends!");
@@ -164,9 +166,11 @@ public class TransitionGroup : MonoBehaviour
         {
             // fade to black
             LeanTween.value(transitionCube, 0f, 1f, 1f)
-                .setOnUpdate((float val) => {
+                .setOnUpdate((float val) =>
+                {
                     transitionCubeMaterial.color = Color.Lerp(transitionCubeMaterial.color, Color.black, val);
-                }).setOnComplete(()=> {
+                }).setOnComplete(() =>
+                {
                     EventBus.TransitionEnded.Invoke();
                     Debug.Log("Transition to " + currentTransitionToEnv.ToString() + " ends!");
                 });
@@ -176,7 +180,7 @@ public class TransitionGroup : MonoBehaviour
     private IEnumerator DuringTransition(float audioDuration)
     {
         yield return new WaitForSeconds(audioDuration);
-        // Show prompt for User to walk out
+        // TODO: Show prompt for User to walk out
         duringTransitionCoroutine = null;
     }
 
@@ -194,6 +198,17 @@ public class TransitionGroup : MonoBehaviour
         startTransitionTrigger.gameObject.SetActive(true);
         endTransitionTrigger.gameObject.SetActive(false);
         EventBus.EnteredTranitionEndTrigger.Invoke(toEnv);
+    }
+
+    public void UpdateAfterCalibrationEnd()
+    {
+        // fade out text?
+
+        // update Transform
+        transform.position = envToTransitionAnchor[currentTransitionToEnv].transform.position;
+        transform.rotation = envToTransitionAnchor[currentTransitionToEnv].transform.rotation;
+
+        // fade in text, show more stuff
     }
 
     public void UpdateForNextEnv(EnvironmentType nextEnv)
@@ -234,7 +249,8 @@ public class TransitionGroup : MonoBehaviour
         Color clearColor = transitionCubeMaterial.color;
         clearColor.a = 0f;
         return LeanTween.value(transitionCube, 0f, 1f, 1f)
-            .setOnUpdate((float val) => {
+            .setOnUpdate((float val) =>
+            {
                 transitionCubeMaterial.color = Color.Lerp(transitionCubeMaterial.color, clearColor, val);
             });
     }
