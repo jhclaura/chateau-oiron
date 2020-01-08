@@ -99,7 +99,7 @@ public class TransitionGroup : MonoBehaviour
             tween.setOnComplete(() =>
             {
                 EventBus.TransitionStarted.Invoke();
-                if (env == EnvironmentType.Forest)
+                if (env != EnvironmentType.Water)
                 {
                     turnGraphic.SetActive(true);
                     turnText.gameObject.SetActive(true);
@@ -122,10 +122,16 @@ public class TransitionGroup : MonoBehaviour
         }
         else
         {
+            //v.1
+            /*
             if (env == EnvironmentType.Forest)
                 turnText.text = "Diatom lost.\nDiatom found.\nYou are now connected to the\nlabyrinth network.\nTurn around and step forward.";
             else if (env != EnvironmentType.Water)
                 frontText.text = "Diatom lost.\nDiatom found.\nYou are now connected to the\nlabyrinth network.\nProceed with caution.";
+            */
+
+            if (env != EnvironmentType.Water)
+                turnText.text = "Diatom lost.\nDiatom found.\nYou are now connected to the\nlabyrinth network.\nTurn around and step forward.";
 
             // diatome lost
             MonologueManager.Instance.Play(monologue);

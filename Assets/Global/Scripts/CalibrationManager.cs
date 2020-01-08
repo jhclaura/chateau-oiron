@@ -15,6 +15,7 @@ public class CalibrationManager : Manager<CalibrationManager>
     public Monologue proceedMonologue;
 
     [Header("Dev")]
+    public bool lookStraightMode;
     public bool devMode;
     public Transform dummyControllerLeft;
     public Transform dummyControllerRight;
@@ -165,12 +166,14 @@ public class CalibrationManager : Manager<CalibrationManager>
         Vector3 direction = Quaternion.Euler(0, 90, 0) * side1;
         direction.Normalize();
 
-        startAnchor.position = centerPoint;
-        startAnchor.rotation = Quaternion.LookRotation(direction);
+        if (!lookStraightMode)
+        {
+            startAnchor.position = centerPoint;
+            startAnchor.rotation = Quaternion.LookRotation(direction);
+        }
 
         //GameObject newForward = Instantiate(forwardPrefab, centerPoint, Quaternion.LookRotation(direction), environmentHolder);
-
-        Debug.DrawRay(centerPoint, direction, Color.green, 5f);
+        //Debug.DrawRay(centerPoint, direction, Color.green, 5f);
 
         DisplayInfoText("Calibration finished.");
         EventBus.CalibrationEnded.Invoke();

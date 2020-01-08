@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: WaterProDaytime2
-  m_Shader: {fileID: 4800000, guid: f2d5032a2942f4549b24b09b7f193da6, type: 3}
+  m_Shader: {fileID: 4800000, guid: 0785e81ea83fdc948bce8a8de3b71849, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -71,7 +71,7 @@ Material:
     - WaveSpeed: {r: 4, g: 2, b: -7, a: -3}
     - _BumpMap_ST: {r: 1, g: 1, b: 0, a: 0}
     - _Fresnel_ST: {r: 1, g: 1, b: 0, a: 0}
-    - _HorizonColor: {r: 0.8897059, g: 0.8897059, b: 0.8897059, a: 0}
+    - _HorizonColor: {r: 0.054957286, g: 0.14534853, b: 0.1792453, a: 1}
     - _MainTex_ST: {r: 1, g: 1, b: 0, a: 0}
     - _RefleLeftColor: {r: 0.33999997, g: 0.85, b: 0.92, a: 1}
     - _RefleRightColor: {r: 0.33999997, g: 0.85, b: 0.92, a: 1}
