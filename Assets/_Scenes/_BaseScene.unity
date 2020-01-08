@@ -2183,7 +2183,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &580231318
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6472,7 +6472,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &1424565931
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8993,7 +8993,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afffe507dc4ce478390bbdd74c811fff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startAnchor: {fileID: 1796604256}
+  startAnchor: {fileID: 1346522477}
   environmentHolder: {fileID: 339388310}
   forwardPrefab: {fileID: 6042245938554089500, guid: 753cfc866fe9e4f93a9bfdee38eebaba,
     type: 3}
@@ -9001,8 +9001,9 @@ MonoBehaviour:
   rightControllerOffset: {x: 0.0095, y: 0.001, z: 0.036}
   waitMonologue: {fileID: 1187035537}
   proceedMonologue: {fileID: 1869215119}
-  lookStraightMode: 1
+  lookStraightMode: 0
   devMode: 0
+  rightControllerOnly: 1
   dummyControllerLeft: {fileID: 1424565934}
   dummyControllerRight: {fileID: 580231321}
   smallBallPrefab: {fileID: 5909894051826408190, guid: f20664bfaf36a4e5097600aec5515680,

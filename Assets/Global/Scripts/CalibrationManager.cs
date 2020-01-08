@@ -17,6 +17,7 @@ public class CalibrationManager : Manager<CalibrationManager>
     [Header("Dev")]
     public bool lookStraightMode;
     public bool devMode;
+    public bool rightControllerOnly;
     public Transform dummyControllerLeft;
     public Transform dummyControllerRight;
     public GameObject smallBallPrefab;
@@ -63,7 +64,7 @@ public class CalibrationManager : Manager<CalibrationManager>
         }
 
         // Listen for controllers
-        if (!leftControllerIsPressed)
+        if (!rightControllerOnly && !leftControllerIsPressed)
         {
             if (CheckIfPressingController(VRHand.Left))
             {
@@ -110,13 +111,16 @@ public class CalibrationManager : Manager<CalibrationManager>
         // waiting for two controller both be PRESSED
         float timePassed = 0;
         bool displayInfoText = false;
-        while (!leftControllerIsPressed || !rightControllerIsPressed)
+        while ((!rightControllerOnly && !leftControllerIsPressed) || !rightControllerIsPressed)
         {
             timePassed += Time.deltaTime;
             if (timePassed > 5f && !displayInfoText)
             {
                 displayInfoText = true;
-                DisplayInfoText("Now, please press both controllers to start calibration.", 10f);
+                if(rightControllerOnly)
+                    DisplayInfoText("Now, please press right controller to start calibration.", 10f);
+                else
+                    DisplayInfoText("Now, please press both controllers to start calibration.", 10f);
             }
             yield return null;
         }
@@ -168,6 +172,7 @@ public class CalibrationManager : Manager<CalibrationManager>
 
         if (!lookStraightMode)
         {
+            Debug.Log("startAnchor update!");
             startAnchor.position = centerPoint;
             startAnchor.rotation = Quaternion.LookRotation(direction);
         }
