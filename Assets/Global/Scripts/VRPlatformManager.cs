@@ -15,7 +15,9 @@ public class VRPlatformManager : Manager<VRPlatformManager> {
     public OvrAvatar oculusAvatar;
     public GameObject oculusCameraRig;
     public GameObject oculusLeftController;
+    public GameObject oculusLeftControllerModel;
     public GameObject oculusRightController;
+    public GameObject oculusRightControllerModel;
     public GameObject oculusCenterCamera;
 
     private OVRScreenFade oVRScreenFade;

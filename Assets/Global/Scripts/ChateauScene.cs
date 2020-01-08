@@ -5,6 +5,10 @@ using UnityEngine;
 public class ChateauScene : MonoBehaviour
 {
     public Transform startPoint;
+    [Space(10)]
+    public AnimatedAudio[] aniAudios;
+    public AnimatedLight[] aniLights;
+    public GameObject[] sceneObjects;
 
     private void Awake()
     {
@@ -20,11 +24,37 @@ public class ChateauScene : MonoBehaviour
 
     public void ActivateScene()
     {
+        foreach (GameObject s_object in sceneObjects)
+        {
+            s_object.SetActive(true);
+        }
 
+        foreach (AnimatedAudio _audios in aniAudios)
+        {
+            _audios.ToggleOn();
+        }
+
+        foreach (AnimatedLight _light in aniLights)
+        {
+            _light.TurnOn(1f);
+        }
     }
 
     public void DeactivateScene()
     {
+        foreach (GameObject s_object in sceneObjects)
+        {
+            s_object.SetActive(false);
+        }
 
+        foreach (AnimatedAudio _audios in aniAudios)
+        {
+            _audios.Stop(true);
+        }
+
+        foreach (AnimatedLight _light in aniLights)
+        {
+            _light.TurnOff();
+        }
     }
 }

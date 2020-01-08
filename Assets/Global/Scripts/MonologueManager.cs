@@ -5,6 +5,8 @@ using UnityEngine;
 public class MonologueManager : Manager<MonologueManager>
 {
     public AnimatedAudio monoluge;
+    public UnityEngine.Audio.AudioMixerSnapshot normalSnapShot;
+    public UnityEngine.Audio.AudioMixerSnapshot monologueSnapShot;
 
     private WaitForSeconds fadeDelay;
 
@@ -16,6 +18,7 @@ public class MonologueManager : Manager<MonologueManager>
     public void Play(Monologue newMonologue)
     {
         StartCoroutine(FadeIn(newMonologue));
+        monologueSnapShot.TransitionTo(1.5f);
     }
 
     IEnumerator FadeIn(Monologue newMonologue)
@@ -35,6 +38,7 @@ public class MonologueManager : Manager<MonologueManager>
         if (monoluge.IsPlaying)
         {
             monoluge.Toggle(false, 0, 1f, 0f);
+            normalSnapShot.TransitionTo(1.5f);
         }
     }
 
@@ -43,6 +47,7 @@ public class MonologueManager : Manager<MonologueManager>
         if (!monoluge.IsPlaying)
         {
             monoluge.Toggle(true, monoluge.OriginalVolumn, .5f, 0f);
+            monologueSnapShot.TransitionTo(1f);
         }
     }
 }

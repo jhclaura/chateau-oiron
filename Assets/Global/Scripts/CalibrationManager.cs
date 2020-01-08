@@ -15,9 +15,9 @@ public class CalibrationManager : Manager<CalibrationManager>
     public Monologue proceedMonologue;
 
     [Header("Dev")]
-    public bool lookStraightMode;
     public bool devMode;
     public bool rightControllerOnly;
+    private bool lookStraightMode;
     public Transform dummyControllerLeft;
     public Transform dummyControllerRight;
     public GameObject smallBallPrefab;
@@ -161,6 +161,8 @@ public class CalibrationManager : Manager<CalibrationManager>
 
         leftSmallBall.SetActive(false);
         rightSmallBall.SetActive(false);
+        VRPlatformManager.Instance.oculusLeftControllerModel.SetActive(false);
+        VRPlatformManager.Instance.oculusRightControllerModel.SetActive(false);
 
         rightControllerPosition.y = leftControllerPosition.y = 0;
 
