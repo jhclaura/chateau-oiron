@@ -10,12 +10,27 @@ public class Monologue : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (isPlayed) return;
+        if (!other.gameObject.CompareTag("Player"))
+            return;
 
-        if (other.gameObject.CompareTag("Player"))
+        Debug.Log("player entered!");
+
+        if (isPlayed && MonologueManager.Instance.monoluge.TargetAudio.clip == audioClip)
+        {
+            MonologueManager.Instance.Resume();
+        }
+        else
         {
             MonologueManager.Instance.Play(this);
             isPlayed = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (isPlayed && MonologueManager.Instance.monoluge.TargetAudio.clip==audioClip)
+        {
+            MonologueManager.Instance.Pause();
         }
     }
 }

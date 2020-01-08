@@ -29,4 +29,20 @@ public class MonologueManager : Manager<MonologueManager>
         monoluge.transform.position = newMonologue.transform.position;
         monoluge.Toggle(true, 1, 1f, 0f);
     }
+
+    public void Pause()
+    {
+        if (monoluge.IsPlaying)
+        {
+            monoluge.Toggle(false, 0, 1f, 0f);
+        }
+    }
+
+    public void Resume()
+    {
+        if (!monoluge.IsPlaying)
+        {
+            monoluge.Toggle(true, monoluge.OriginalVolumn, .5f, 0f);
+        }
+    }
 }
