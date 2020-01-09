@@ -134,19 +134,20 @@ public class EnvironmentManager : Manager<EnvironmentManager>
 
     void UpdateEnvironmentColors()
     {
-        //if (currentEnvironment == EnvironmentType.Bathhouse || currentEnvironment == EnvironmentType.EggBarn)
-        //{
-        //    RenderSettings.fog = true;
-        //    RenderSettings.fogColor = environmentColorDictionary[currentEnvironment].fogColor;
-        //    RenderSettings.fogStartDistance = environmentColorDictionary[currentEnvironment].fogStart;
-        //    RenderSettings.fogEndDistance = environmentColorDictionary[currentEnvironment].fogEnd;
-        //}
-        //else
-        //{
-        //    RenderSettings.fog = false;
-        //}
-
         Environment env = environmentDictionary[currentEnvironment];
+
+        if (env.environmentType == EnvironmentType.Fire)
+        {
+            RenderSettings.fog = true;
+            RenderSettings.fogColor = env.fogColor;
+            RenderSettings.fogStartDistance = env.fogStart;
+            RenderSettings.fogEndDistance = env.fogEnd;
+        }
+        else
+        {
+            RenderSettings.fog = false;
+        }
+
 
         skyboxMaterial.SetColor("_Color2", env.skyColors[0]);
         skyboxMaterial.SetColor("_Color1", env.skyColors[1]);

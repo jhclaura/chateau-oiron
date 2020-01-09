@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   environmentType: 1
   sceneName: Scene_fire
-  fogStart: 0
-  fogEnd: 0
-  fogColor: {r: 0, g: 0, b: 0, a: 0}
+  fogStart: 4
+  fogEnd: 65
+  fogColor: {r: 0.7647059, g: 0.30588236, b: 0.13333334, a: 1}
   skyColors:
   - {r: 0.59607846, g: 0.21568628, b: 0.21568628, a: 0}
-  - {r: 0.047058824, g: 0.03137255, b: 0.03137255, a: 0}
+  - {r: 0.3882353, g: 0.14509805, b: 0.039215688, a: 0}
   ambientColors:
   - {r: 0.11372549, g: 0.039215688, b: 0.03529412, a: 0}
   cameraFadeOutColor: {r: 0, g: 0, b: 0, a: 0}
