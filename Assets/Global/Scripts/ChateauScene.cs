@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ChateauScene : MonoBehaviour
 {
+    public System.Action SceneStarted;
+
     public Transform startPoint;
     [Space(10)]
     public AnimatedAudio[] aniAudios;
@@ -38,6 +40,8 @@ public class ChateauScene : MonoBehaviour
         {
             _light.TurnOn(1f);
         }
+
+        SceneStarted?.Invoke();
     }
 
     public void DeactivateScene()

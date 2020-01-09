@@ -190,7 +190,7 @@ public class TransitionGroup : MonoBehaviour
         duringTransitionCoroutine = null;
     }
 
-    private void HandleEnterStartTransitionTrigger(EnvironmentType toEnv)
+    public void HandleEnterStartTransitionTrigger(EnvironmentType toEnv)
     {
         if (!ChateauSceneManager.Instance.CalibrationIsFinished) return;
         startTransitionTrigger.gameObject.SetActive(false);

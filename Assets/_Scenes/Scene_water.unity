@@ -10763,7 +10763,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1405641358}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -1.22, y: 1.14, z: 6.03}
+  m_LocalPosition: {x: -1.03, y: 1.47, z: 5.22}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1743538749}
@@ -11028,6 +11028,11 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7899031747737506628, guid: 12936dc0ba25f477093f1608778a6cfc,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 12936dc0ba25f477093f1608778a6cfc,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -11082,11 +11087,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 180
-      objectReference: {fileID: 0}
-    - target: {fileID: 7899031747737506628, guid: 12936dc0ba25f477093f1608778a6cfc,
-        type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7852717429138450917, guid: 12936dc0ba25f477093f1608778a6cfc,
         type: 3}
@@ -16582,6 +16582,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1132799109541907509, guid: 699883a014ee545dba189cc7f6dc2ed7,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1132799109541907505, guid: 699883a014ee545dba189cc7f6dc2ed7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1132799109541907510, guid: 699883a014ee545dba189cc7f6dc2ed7,
         type: 3}
       propertyPath: m_LocalRotation.x
@@ -16637,11 +16647,6 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 1132799109541907509, guid: 699883a014ee545dba189cc7f6dc2ed7,
-        type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 1132799109541907511, guid: 699883a014ee545dba189cc7f6dc2ed7,
         type: 3}
       propertyPath: m_fontStyle
@@ -16656,11 +16661,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.characterCount
       value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1132799109541907505, guid: 699883a014ee545dba189cc7f6dc2ed7,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 699883a014ee545dba189cc7f6dc2ed7, type: 3}

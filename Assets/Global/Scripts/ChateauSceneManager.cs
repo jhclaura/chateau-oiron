@@ -19,6 +19,7 @@ public class ChateauSceneManager : Manager<ChateauSceneManager>
     public bool CalibrationIsFinished { get { return m_calibrationIsFinished; } }
     private ChateauScene currentChateauScene;
     private TransitionGroup transitionGroup;
+    public TransitionGroup TheTransitionGroup { get { return transitionGroup; } }
 
     private void OnEnable()
     {
