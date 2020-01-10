@@ -15,7 +15,7 @@ public class Monologue : MonoBehaviour
 
         Debug.Log("player entered!");
 
-        if (isPlayed && MonologueManager.Instance.monoluge.TargetAudio.clip == audioClip)
+        if (isPlayed && MonologueManager.Instance.monolouge.TargetAudio.clip == audioClip)
         {
             MonologueManager.Instance.Resume();
         }
@@ -28,7 +28,7 @@ public class Monologue : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (isPlayed && MonologueManager.Instance.monoluge.TargetAudio.clip==audioClip)
+        if (isPlayed && MonologueManager.Instance.monolouge.TargetAudio.clip==audioClip)
         {
             MonologueManager.Instance.Pause();
         }

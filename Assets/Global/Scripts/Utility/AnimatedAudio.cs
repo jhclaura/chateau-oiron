@@ -21,7 +21,7 @@ public class AnimatedAudio : MonoBehaviour
 	private void Awake()
 	{
 		m_targetAudio = GetComponent<AudioSource>();
-	}
+    }
 
 	private void Start()
     {
@@ -51,7 +51,8 @@ public class AnimatedAudio : MonoBehaviour
         }
         else
         {
-			if (m_targetAudio.isPlaying)
+            if (m_targetAudio==null) m_targetAudio = GetComponent<AudioSource>();
+            if (m_targetAudio.isPlaying)
             {
 				LeanTween.cancel(gameObject);
 				LeanTween.value(gameObject, m_targetAudio.volume, 0f, time)
@@ -105,17 +106,14 @@ public class AnimatedAudio : MonoBehaviour
 
 	public void Play()
 	{
-		m_targetAudio.UnPause();
-
-        if (!m_targetAudio.isPlaying)
-            m_targetAudio.Play();
+        m_targetAudio.volume = m_originalVolumn;
+        m_targetAudio.Play();
 	}
         
 	public void Pause()
 	{
-		if (m_targetAudio.isPlaying)
-			m_targetAudio.Pause();
-	}
+        m_targetAudio.Pause();
+    }
 
 	public void Stop(bool fadeOut = false, float fadeTime = 0.3f)
 	{

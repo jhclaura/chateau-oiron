@@ -19,6 +19,8 @@ public class TransitionGroup : MonoBehaviour
     public bool visibleTrigger;
     public TransitionTrigger startTransitionTrigger;
     public TransitionTrigger endTransitionTrigger;
+    public GameObject introWall;
+    public GameObject transitionWall;
     public GameObject turnGraphic;
     public TMPro.TextMeshPro turnText;
     public TMPro.TextMeshPro frontText;
@@ -28,6 +30,8 @@ public class TransitionGroup : MonoBehaviour
 
     private EnvironmentType currentTransitionToEnv;
     private Material transitionCubeMaterial;
+    private Material introWallMaterial;
+    private Material transitionWallMaterial;
     private IEnumerator duringTransitionCoroutine;
     private AnimatedAudio animatedAudio;
 
@@ -62,6 +66,14 @@ public class TransitionGroup : MonoBehaviour
         transitionCubeMaterial.color = Color.black;
         transitionCube.SetActive(true);
 
+        transitionWallMaterial = transitionWall.GetComponent<Renderer>().sharedMaterial;
+        transitionWallMaterial.color = Color.black;
+        transitionWall.SetActive(false);
+
+        introWallMaterial = introWall.GetComponent<Renderer>().sharedMaterial;
+        introWallMaterial.color = Color.black;
+        introWall.SetActive(false);
+
         if (!visibleTrigger)
         {
             startTransitionTrigger.GetComponent<MeshRenderer>().enabled = false;
@@ -71,15 +83,22 @@ public class TransitionGroup : MonoBehaviour
         animatedAudio = monologue.GetComponent<AnimatedAudio>();
 
         Reset();
+
+        // TODO: disable first transition trigger => auto start in ChateauSceneManager
+
     }
 
     // Called by ChateauSceneManager
-    public void StartTransition(EnvironmentType env, bool skipFade = false)
+    public void StartTransition(EnvironmentType env, bool skipFade = false, bool playAudio = true)
     {
         currentTransitionToEnv = env;
 
-        animatedAudio.TargetAudio.clip = envToTransitionObject[env].audioClip;
-        animatedAudio.ToggleOn();
+        if (playAudio)
+        {
+            animatedAudio.TargetAudio.clip = envToTransitionObject[env].audioClip;
+            //animatedAudio.ToggleOn();
+            animatedAudio.Play();
+        }
 
         // Start waiting for transition to end, if not ended by User (by walking out of transition)
         duringTransitionCoroutine = DuringTransition(envToTransitionObject[env].audioClip.length);
@@ -88,21 +107,25 @@ public class TransitionGroup : MonoBehaviour
         // Just show Transition Cube (case: Calibration Start)
         if (skipFade)
         {
+            SetTransitionCubeColor(envToTransitionObject[env].interiorColor);
             EventBus.TransitionStarted.Invoke();
-            turnGraphic.SetActive(true);
-            turnText.gameObject.SetActive(true);
+            //turnGraphic.SetActive(true);
+            //turnText.gameObject.SetActive(true);
             Debug.Log("Transition to " + currentTransitionToEnv.ToString() + " starts!");
         }
         else // Fade in Transition Cube
         {
+            // Show transition wall abruptly
+            ShowTransitionWall(env);
+
             LTDescr tween = FadeInTransitionCube(envToTransitionObject[env].interiorColor);
             tween.setOnComplete(() =>
             {
                 EventBus.TransitionStarted.Invoke();
                 if (env != EnvironmentType.Water)
                 {
-                    turnGraphic.SetActive(true);
-                    turnText.gameObject.SetActive(true);
+                    //turnGraphic.SetActive(true);
+                    //turnText.gameObject.SetActive(true);
                 }
                 else
                 {
@@ -122,29 +145,26 @@ public class TransitionGroup : MonoBehaviour
         }
         else
         {
-            //v.1
-            /*
-            if (env == EnvironmentType.Forest)
-                turnText.text = "Diatom lost.\nDiatom found.\nYou are now connected to the\nlabyrinth network.\nTurn around and step forward.";
-            else if (env != EnvironmentType.Water)
-                frontText.text = "Diatom lost.\nDiatom found.\nYou are now connected to the\nlabyrinth network.\nProceed with caution.";
-            */
-
             if (env != EnvironmentType.Water)
                 turnText.text = "Diatom lost.\nDiatom found.\nYou are now connected to the\nlabyrinth network.\nTurn around and step forward.";
 
-            // diatome lost
-            MonologueManager.Instance.Play(monologue);
+            // diatome lost => instead, play animatedAudio from each TransitionObject
+            //MonologueManager.Instance.Play(monologue);
         }
     }
 
     // Called by ChateauSceneManager
-    public void EndTransition(bool doFadeOut = true)
+    public void EndTransition(bool doFadeOut = true, bool stopAudio = true)
     {
-        animatedAudio.Stop(true, 0.5f);
+        if(stopAudio)
+            animatedAudio.Stop(true, 0.5f);
+
         turnGraphic.SetActive(false);
         turnText.gameObject.SetActive(false);
         frontText.gameObject.SetActive(false);
+
+        HideTransitionWall();
+
         if (currentTransitionToEnv == EnvironmentType.End)
         {
             frontText.text = "";
@@ -160,7 +180,13 @@ public class TransitionGroup : MonoBehaviour
         // Fade out Transition Cube
         if (doFadeOut)
         {
-            LTDescr tween = FadeOutTransitionCube();
+            LTDescr tween;
+            Debug.Log(currentTransitionToEnv);
+            if(currentTransitionToEnv==EnvironmentType.Water)
+                tween = FadeOutTransitionCube(8f, 2.1f);
+            else
+                tween = FadeOutTransitionCube();
+
             tween.setOnComplete(() =>
             {
                 transitionCube.SetActive(false);
@@ -170,7 +196,7 @@ public class TransitionGroup : MonoBehaviour
         }
         else
         {
-            // fade to black
+            // change Transition Cube to black
             LeanTween.value(transitionCube, 0f, 1f, 1f)
                 .setOnUpdate((float val) =>
                 {
@@ -183,6 +209,13 @@ public class TransitionGroup : MonoBehaviour
         }
     }
 
+    // Will be called by ChateauSceneManager, probably ONLY ChateauSceneManager
+    public void PlayTransitionAudio(EnvironmentType env)
+    {
+        animatedAudio.TargetAudio.clip = envToTransitionObject[env].audioClip;
+        animatedAudio.ToggleOn();
+    }
+
     private IEnumerator DuringTransition(float audioDuration)
     {
         yield return new WaitForSeconds(audioDuration);
@@ -192,6 +225,7 @@ public class TransitionGroup : MonoBehaviour
 
     public void HandleEnterStartTransitionTrigger(EnvironmentType toEnv)
     {
+        Debug.Log("Enter start transition trigger");
         if (!ChateauSceneManager.Instance.CalibrationIsFinished) return;
         startTransitionTrigger.gameObject.SetActive(false);
         endTransitionTrigger.gameObject.SetActive(true);
@@ -250,23 +284,69 @@ public class TransitionGroup : MonoBehaviour
             });
     }
 
-    public LTDescr FadeOutTransitionCube()
+    public LTDescr FadeOutTransitionCube(float speed = 1f, float delay = 0f)
     {
         Color clearColor = transitionCubeMaterial.color;
         clearColor.a = 0f;
-        return LeanTween.value(transitionCube, 0f, 1f, 1f)
+        return LeanTween.value(transitionCube, 0f, 1f, speed)
+            .setDelay(delay)
             .setOnUpdate((float val) =>
             {
                 transitionCubeMaterial.color = Color.Lerp(transitionCubeMaterial.color, clearColor, val);
             });
     }
 
+    private void SetTransitionCubeColor(Color newColor)
+    {
+        transitionCubeMaterial.color = newColor;
+    }
+
     public void Reset()
     {
         startTransitionTrigger.gameObject.SetActive(false);
-        endTransitionTrigger.gameObject.SetActive(true);
+        endTransitionTrigger.gameObject.SetActive(false);   // first scene is triggered automatically by SceneManager
 
-        turnText.gameObject.SetActive(true);
+        //turnText.gameObject.SetActive(true);
         turnText.text = "Diatom lost.\nPlease turn around to restart the experience.";
+    }
+
+    public void ShowTransitionWall(EnvironmentType env)
+    {
+        // TODO: trigger different animations
+
+        if (env==EnvironmentType.Water)
+        {
+            introWall.SetActive(true);
+            LeanTween.value(introWall, 0f, 1f, 2f)
+                    .setOnUpdate((float val) =>
+                    {
+                        introWallMaterial.color = Color.Lerp(introWallMaterial.color, Color.grey, val);
+                    });
+        }
+        else
+        {
+            transitionWall.SetActive(true);
+            transitionWallMaterial.color = Color.white;
+        }
+    }
+
+    public void HideTransitionWall()
+    {
+        if (currentTransitionToEnv == EnvironmentType.Water)
+        {
+            LeanTween.value(introWall, 0f, 1f, 2f)
+                    .setOnUpdate((float val) =>
+                    {
+                        introWallMaterial.color = Color.Lerp(introWallMaterial.color, Color.black, val);
+                    })
+                    .setOnComplete(()=>
+                    {
+                        introWall.SetActive(false);
+                    });
+        }
+        else
+        {
+            transitionWall.SetActive(false);
+        }
     }
 }

@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: TransitionOfEnd
   m_EditorClassIdentifier: 
   toEnvironment: 4
-  audioClip: {fileID: 8300000, guid: b79f2ccce435e4b4dab56cfb8c6a14ee, type: 3}
-  interiorColor: {r: 0.16981131, g: 0.090512626, b: 0.090512626, a: 1}
+  audioClip: {fileID: 8300000, guid: c2d2b541804e64b7fad6cd3a853a7f12, type: 3}
+  interiorColor: {r: 0, g: 0, b: 0, a: 1}

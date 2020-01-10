@@ -9,14 +9,15 @@ public class CalibrationManager : Manager<CalibrationManager>
     public GameObject forwardPrefab;
     public Vector3 leftControllerOffset;
     public Vector3 rightControllerOffset;
+    public float waitTimeAfterCalibrationEnds = 30f;
 
-    [Header("Sounds")]
-    public Monologue waitMonologue;
-    public Monologue proceedMonologue;
+    //[Header("Sounds")]
+    //public Monologue waitMonologue;
+    //public Monologue proceedMonologue;
 
     [Header("Dev")]
     public bool devMode;
-    public bool rightControllerOnly;
+    private bool rightControllerOnly = true;
     private bool lookStraightMode;
     public Transform dummyControllerLeft;
     public Transform dummyControllerRight;
@@ -41,7 +42,6 @@ public class CalibrationManager : Manager<CalibrationManager>
     void Start()
     {
         infoTextColor = infoText.color;
-        //DisplayInfoText("Start.");        
         leftSmallBall = Instantiate(smallBallPrefab, transform);
         rightSmallBall = Instantiate(smallBallPrefab, transform);
         controllerVibrationWait = new WaitForSeconds(0.2f);
@@ -118,16 +118,16 @@ public class CalibrationManager : Manager<CalibrationManager>
             {
                 displayInfoText = true;
                 if(rightControllerOnly)
-                    DisplayInfoText("Now, please press right controller to start calibration.", 10f);
+                    DisplayInfoText("Now, please press right controller to start calibration.", 30f);
                 else
-                    DisplayInfoText("Now, please press both controllers to start calibration.", 10f);
+                    DisplayInfoText("Now, please press both controllers to start calibration.", 30f);
             }
             yield return null;
         }
         DisplayInfoText("Calibration started.");
         EventBus.CalibrationStarted.Invoke();
 
-        MonologueManager.Instance.Play(waitMonologue);
+        //MonologueManager.Instance.Play(waitMonologue);
 
         // after both are pressed, wait for 5 seconds
         float passedTime = 0;
@@ -179,20 +179,26 @@ public class CalibrationManager : Manager<CalibrationManager>
             startAnchor.rotation = Quaternion.LookRotation(direction);
         }
 
-        //GameObject newForward = Instantiate(forwardPrefab, centerPoint, Quaternion.LookRotation(direction), environmentHolder);
-        //Debug.DrawRay(centerPoint, direction, Color.green, 5f);
-
         DisplayInfoText("Calibration finished.");
         EventBus.CalibrationEnded.Invoke();
 
         yield return new WaitForSeconds(5f);
-        DisplayInfoText("Diatom lost.\nDiatom found.\nYou are now connected to the\nlabyrinth network. Proceed with caution.", 5f);
+        //DisplayInfoText("Diatom lost.\nDiatom found.\nYou are now connected to the\nlabyrinth network. Proceed with caution.", 5f);
+        //MonologueManager.Instance.Play(proceedMonologue);
 
-        MonologueManager.Instance.Play(proceedMonologue);
-
-        yield return new WaitForSeconds(7f);
         infoText.gameObject.SetActive(false);
         infoText.color = infoTextColor;
+
+        // TODO: show intro visuals
+
+        if(devMode)
+            yield return new WaitForSeconds(1f);
+        else
+            yield return new WaitForSeconds(waitTimeAfterCalibrationEnds);
+
+        // Start Intro! TODO: wait for a trigger press?
+        Debug.Log("Start Experience Triggered, 30 sec after calibration");
+        EventBus.StartExperienceTriggered.Invoke();
     }
 
     public void VibrateController(OVRInput.Controller controller)
@@ -202,15 +208,15 @@ public class CalibrationManager : Manager<CalibrationManager>
 
     private IEnumerator DoControllerVibration(OVRInput.Controller controller)
     {
-        OVRInput.SetControllerVibration(1f, 0.5f, controller);
+        OVRInput.SetControllerVibration(1f, 0.8f, controller);
         yield return controllerVibrationWait;
         OVRInput.SetControllerVibration(1f, 0.0f, controller);
         yield return controllerVibrationWait;
-        OVRInput.SetControllerVibration(1f, 0.5f, controller);
+        OVRInput.SetControllerVibration(1f, 0.8f, controller);
         yield return controllerVibrationWait;
         OVRInput.SetControllerVibration(1f, 0.0f, controller);
         yield return controllerVibrationWait;
-        OVRInput.SetControllerVibration(1f, 0.5f, controller);
+        OVRInput.SetControllerVibration(1f, 0.8f, controller);
         yield return controllerVibrationWait;
         OVRInput.SetControllerVibration(1f, 0.0f, controller);
         yield return controllerVibrationWait;
@@ -218,17 +224,10 @@ public class CalibrationManager : Manager<CalibrationManager>
 
     public void DisplayInfoText(string info, float duration=3f)
     {
-        //if (infoText.text != "")
-        //{
-        //    infoText.text += ("\n\n" + info);
-        //}
-        //else
-        //{
-        //    infoText.text = info;
-        //}
         Debug.Log(info);
-        //CancelInvoke("EmptyInfoText");
-        //Invoke("EmptyInfoText", duration);
+
+        // if it's not dev mode, show no text
+        //if (!devMode) return;
 
         if (emptyInfoTweenId != 0 && LeanTween.isTweening(emptyInfoTweenId))
         {
@@ -306,6 +305,6 @@ public class CalibrationManager : Manager<CalibrationManager>
         leftSmallBall.SetActive(true);
         rightSmallBall.SetActive(true);
         infoText.gameObject.SetActive(true);
-        DisplayInfoText("Please wait while the diatom connects you to the labyrinth network.", 10f);
+        DisplayInfoText("Prepare for calibration.", 10f);
     }
 }

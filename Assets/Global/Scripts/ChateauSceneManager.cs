@@ -12,7 +12,13 @@ public class ChateauSceneManager : Manager<ChateauSceneManager>
     public EnvironmentType currentEnvironment;
 
     [Space(10)]
-    public bool restartAfterEnd;
+    public Monologue intro;
+    public Monologue firstDiatom;
+    private float introClipLength;
+    private float introStartTimestamp;
+    private bool introIsPlaying;
+
+    private bool restartAfterEnd = false;
 
     private int nextEnvIndex = 0;
     private bool m_calibrationIsFinished;
@@ -23,6 +29,7 @@ public class ChateauSceneManager : Manager<ChateauSceneManager>
 
     private void OnEnable()
     {
+        EventBus.StartExperienceTriggered.AddListener(HandleStartExperienceTriggered);
         EventBus.NewSceneLoaded.AddListener(HandleNewSceneLoaded);
         EventBus.CalibrationStarted.AddListener(HandleCalibrationStart);
         EventBus.CalibrationEnded.AddListener(HandleCalibrationEnd);
@@ -33,6 +40,7 @@ public class ChateauSceneManager : Manager<ChateauSceneManager>
 
     private void OnDisable()
     {
+        EventBus.StartExperienceTriggered.RemoveListener(HandleStartExperienceTriggered);
         EventBus.NewSceneLoaded.RemoveListener(HandleNewSceneLoaded);
         EventBus.CalibrationStarted.RemoveListener(HandleCalibrationStart);
         EventBus.CalibrationEnded.RemoveListener(HandleCalibrationEnd);
@@ -43,14 +51,7 @@ public class ChateauSceneManager : Manager<ChateauSceneManager>
 
     void Start()
     {
-        //environmentOrderDict = new Dictionary<int, EnvironmentType>()
-        //{
-        //    { 1, EnvironmentType.Fire },
-        //    { 2, EnvironmentType.Water },
-        //    { 3, EnvironmentType.Forest },
-        //    { 4, EnvironmentType.Beetle },
-        //    { 5, EnvironmentType.End }
-        //};
+        introClipLength = intro.audioClip.length;
         transitionGroup = transitionGroupObject.GetComponent<TransitionGroup>();
 
         // Enable Opening transition cube ONLY, don't start it yet
@@ -60,10 +61,30 @@ public class ChateauSceneManager : Manager<ChateauSceneManager>
         CalibrationManager.Instance.StartCalibration();
     }
 
+    private void Update()
+    {
+        if(introIsPlaying && (Time.time - introStartTimestamp)>introClipLength)
+        {
+            introIsPlaying = false;
+
+            // intro finishes! manually start the scene => HandleEnterEndTransitionTrigger(currentEnvironment);
+            transitionGroup.EndTransition(true, false);
+            currentChateauScene.ActivateScene();
+            //transitionGroup.PlayTransitionAudio(currentEnvironment);
+            MonologueManager.Instance.Play(firstDiatom);
+            Invoke("SetStartTransitionTriggerActive", 15f);
+        }
+    }
+
+    private void SetStartTransitionTriggerActive()
+    {
+        transitionGroup.startTransitionTrigger.gameObject.SetActive(true);
+    }
+
     private void HandleCalibrationStart()
     {
         m_calibrationIsFinished = false;
-        transitionGroup.StartTransition(currentEnvironment, true);
+        transitionGroup.StartTransition(currentEnvironment, true, false);
     }
 
     private void HandleCalibrationEnd()
@@ -77,23 +98,21 @@ public class ChateauSceneManager : Manager<ChateauSceneManager>
         currentChateauScene.UpdateTransformWithAnchor(transitionGroup.envToTransitionAnchor[EnvironmentManager.Instance.currentEnvironment].transform);
     }
 
+    private void HandleStartExperienceTriggered()
+    {
+        // Start intro sound
+        MonologueManager.Instance.Play(intro);
+        introStartTimestamp = Time.time;
+        introIsPlaying = true;
+
+        // Show transition wall for intro
+        transitionGroup.ShowTransitionWall(currentEnvironment);
+    }
+
     private void HandleNewSceneLoaded(string newEnv)
     {
         currentChateauScene = FindObjectOfType<ChateauScene>();
         Debug.Log("Found currentChateauScene of " + currentChateauScene.gameObject.name);
-
-        //switch (newEnv)
-        //{
-        //    case "fire":
-
-        //        break;
-
-        //    case "water":
-        //    case "forest":
-        //    case "beetle":
-
-        //        break;
-        //}
 
         // update env transformation
         currentChateauScene.UpdateTransformWithAnchor(transitionGroup.envToTransitionAnchor[EnvironmentManager.Instance.currentEnvironment].transform);
@@ -101,6 +120,7 @@ public class ChateauSceneManager : Manager<ChateauSceneManager>
 
     private void HandleEnterStartTransitionTrigger(EnvironmentType toEnv)
     {
+        Debug.Log("Handle Enter Start Transition Trigger");
         // turn off currentEnv
         currentChateauScene.DeactivateScene();
 

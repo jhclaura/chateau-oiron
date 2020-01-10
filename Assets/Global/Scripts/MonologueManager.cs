@@ -4,15 +4,27 @@ using UnityEngine;
 
 public class MonologueManager : Manager<MonologueManager>
 {
-    public AnimatedAudio monoluge;
+    public AnimatedAudio monolouge;
     public UnityEngine.Audio.AudioMixerSnapshot normalSnapShot;
     public UnityEngine.Audio.AudioMixerSnapshot monologueSnapShot;
 
     private WaitForSeconds fadeDelay;
+    private float currentMonologueLength;
+    private float currentMonologueStartTimestamp;
+    private bool currentMonologueIsPlaying;
 
     void Start()
     {
         fadeDelay = new WaitForSeconds(0.55f);
+    }
+
+    private void Update()
+    {
+        if (currentMonologueIsPlaying && (Time.time- currentMonologueStartTimestamp>currentMonologueLength))
+        {
+            currentMonologueIsPlaying = false;
+            normalSnapShot.TransitionTo(1.5f);
+        }
     }
 
     public void Play(Monologue newMonologue)
@@ -23,31 +35,45 @@ public class MonologueManager : Manager<MonologueManager>
 
     IEnumerator FadeIn(Monologue newMonologue)
     {
-        if (monoluge.IsPlaying)
+        if (monolouge.IsPlaying)
         {
-            monoluge.Toggle(false, 0, .5f, 0f, true);
+            monolouge.Toggle(false, 0, .5f, 0f, true);
+            currentMonologueIsPlaying = false;
             yield return fadeDelay;
         }
-        monoluge.TargetAudio.clip = newMonologue.audioClip;
-        monoluge.transform.position = newMonologue.transform.position;
-        monoluge.Toggle(true, 1, 1f, 0f);
+        Debug.Log("play monologue");
+        monolouge.TargetAudio.clip = newMonologue.audioClip;
+        monolouge.transform.position = newMonologue.transform.position;
+
+        currentMonologueIsPlaying = true;
+        currentMonologueStartTimestamp = Time.time;
+        currentMonologueLength = newMonologue.audioClip.length;
+
+        monolouge.Toggle(true, 1, 1f, 0f);
     }
 
     public void Pause()
     {
-        if (monoluge.IsPlaying)
+        Debug.Log("pause monologue");
+        if (monolouge.IsPlaying)
         {
-            monoluge.Toggle(false, 0, 1f, 0f);
-            normalSnapShot.TransitionTo(1.5f);
+            monolouge.Toggle(false, 0, 1.5f, 0f);
+            normalSnapShot.TransitionTo(2f);
+
+            currentMonologueIsPlaying = false;
+            currentMonologueStartTimestamp += 1.5f;
         }
     }
 
     public void Resume()
     {
-        if (!monoluge.IsPlaying)
+        Debug.Log("resume monologue");
+        if (!monolouge.IsPlaying)
         {
-            monoluge.Toggle(true, monoluge.OriginalVolumn, .5f, 0f);
-            monologueSnapShot.TransitionTo(1f);
+            monolouge.Toggle(true, monolouge.OriginalVolumn, 1f, 0f);
+            monologueSnapShot.TransitionTo(1.5f);
+
+            currentMonologueIsPlaying = true;
         }
     }
 }

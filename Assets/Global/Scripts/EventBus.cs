@@ -11,9 +11,8 @@ public class EnvEvent : UnityEvent<EnvironmentType> { }
 
 public class EventBus
 {
-    public static UnityEvent StartGameTriggered = new UnityEvent();
+    public static UnityEvent StartExperienceTriggered = new UnityEvent();
     //public static UserSettingsChangedEvent UserSettingsChanged = new UserSettingsChangedEvent();
-    public static UnityEvent ToggleMenuVisibility = new UnityEvent();
 
     public static StringEvent NewSceneLoaded = new StringEvent();
 

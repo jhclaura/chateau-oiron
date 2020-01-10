@@ -85,7 +85,7 @@ public class EnvironmentManager : Manager<EnvironmentManager>
 
     IEnumerator LoadEnvironmentSceneAsync(EnvironmentType newEnv)
     {
-        FadeOut(environmentDictionary[currentEnvironment].cameraFadeOutColor);
+        //FadeOut(environmentDictionary[currentEnvironment].cameraFadeOutColor);
         yield return new WaitForSeconds(1.5f);
 
         // Unload
@@ -120,7 +120,7 @@ public class EnvironmentManager : Manager<EnvironmentManager>
 
         // Scene load! fade in camera view
         yield return new WaitForSeconds(0.5f);
-        FadeIn();
+        //FadeIn();
 
         isLoading = false;
     }
