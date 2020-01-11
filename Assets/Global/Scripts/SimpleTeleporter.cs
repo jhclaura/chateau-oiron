@@ -62,7 +62,7 @@ public class SimpleTeleporter : MonoBehaviour
         }
         pointer.GetComponent<MeshRenderer>().material = pointerMaterial;
 
-        floorLayer = 1 << 8;
+        //floorLayer = 1 << 8;
 
         holder.SetActive(false);
     }

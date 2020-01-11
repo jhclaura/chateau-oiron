@@ -26,6 +26,7 @@ public class ChateauScene : MonoBehaviour
 
     public void ActivateScene()
     {
+        Debug.Log("Activate Scene");
         foreach (GameObject s_object in sceneObjects)
         {
             s_object.SetActive(true);
@@ -46,6 +47,8 @@ public class ChateauScene : MonoBehaviour
 
     public void DeactivateScene()
     {
+        Debug.Log("Deactivate Scene");
+
         foreach (GameObject s_object in sceneObjects)
         {
             s_object.SetActive(false);

@@ -12,11 +12,12 @@ public class GridCeiling : MonoBehaviour
 
     private float envSoundLength;
     private Vector3 newPivotPosition;
-    [HideInInspector]
+    //[HideInInspector]
     public Transform playerCameraTransform;
     private Vector3 camOnFloor;
     private Vector3 floorToPivot;
     private Vector3 previousPlayerCameraPosition;
+    private bool sceneStarted;
 
     private void Start()
     {
@@ -25,13 +26,13 @@ public class GridCeiling : MonoBehaviour
         newPivotPosition = pivot.transform.position;
         if (playerCameraTransform==null)
             playerCameraTransform = VRPlatformManager.Instance.oculusCenterCamera.transform;
-        camOnFloor = new Vector3(pivot.position.x, 0, playerCameraTransform.position.z);
         floorToPivot = new Vector3(0,-pivot.position.y,0);
-        previousPlayerCameraPosition = playerCameraTransform.position;
     }
 
     void Update()
     {
+        if (!sceneStarted) return;
+
         camOnFloor.z = playerCameraTransform.position.z;
         //Vector3 camToPivot = (camOnFloor - pivot.transform.position);
         float angle = Vector3.Angle(camOnFloor - pivot.transform.position, floorToPivot);
@@ -60,8 +61,12 @@ public class GridCeiling : MonoBehaviour
 
     public void OnSceneStart()
     {
-        mainEnvSound.ToggleOn();
+        camOnFloor = new Vector3(pivot.position.x, 0, playerCameraTransform.position.z);
+        previousPlayerCameraPosition = playerCameraTransform.position;
+
+        //mainEnvSound.ToggleOn();
         doRotate = true;
+        sceneStarted = true;
     }
 
     public void TriggerEnding()
