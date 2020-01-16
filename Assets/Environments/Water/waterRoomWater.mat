@@ -48,7 +48,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ReflectiveColor:
-        m_Texture: {fileID: 2800000, guid: 4c7df98e782da40c581ce85be671b7a0, type: 3}
+        m_Texture: {fileID: 2800000, guid: b725b62cfc9d04e4886735ab2a8107d1, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ReflectiveColorCube:
@@ -71,7 +71,7 @@ Material:
     - WaveSpeed: {r: 4, g: 2, b: -7, a: -3}
     - _BumpMap_ST: {r: 1, g: 1, b: 0, a: 0}
     - _Fresnel_ST: {r: 1, g: 1, b: 0, a: 0}
-    - _HorizonColor: {r: 0.054957286, g: 0.14534853, b: 0.1792453, a: 1}
+    - _HorizonColor: {r: 0.6320754, g: 0.617168, b: 0.617168, a: 1}
     - _MainTex_ST: {r: 1, g: 1, b: 0, a: 0}
     - _RefleLeftColor: {r: 0.33999997, g: 0.85, b: 0.92, a: 1}
     - _RefleRightColor: {r: 0.33999997, g: 0.85, b: 0.92, a: 1}
