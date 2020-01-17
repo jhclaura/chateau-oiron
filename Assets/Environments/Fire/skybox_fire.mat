@@ -78,7 +78,7 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Color1: {r: 0.38679248, g: 0.14437291, b: 0.03831435, a: 0}
-    - _Color2: {r: 0.59607846, g: 0.21568628, b: 0.21568628, a: 0}
+    - _Color1: {r: 0, g: 0, b: 0, a: 0}
+    - _Color2: {r: 0.5754717, g: 0.24035141, b: 0.1764418, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _UpVector: {r: 0, g: 1, b: 0, a: 0}
