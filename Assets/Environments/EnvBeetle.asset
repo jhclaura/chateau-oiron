@@ -18,8 +18,8 @@ MonoBehaviour:
   fogEnd: 0
   fogColor: {r: 0, g: 0, b: 0, a: 0}
   skyColors:
-  - {r: 0.5372549, g: 0.50980395, b: 0.28627452, a: 0}
-  - {r: 0.05490196, g: 0.105882354, b: 0.06666667, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
   ambientColors:
   - {r: 1, g: 1, b: 1, a: 0}
   cameraFadeOutColor: {r: 0, g: 0, b: 0, a: 0}
