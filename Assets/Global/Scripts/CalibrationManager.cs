@@ -6,7 +6,7 @@ public class CalibrationManager : Manager<CalibrationManager>
 {
     public Transform startAnchor;
     public Transform environmentHolder;
-    public GameObject forwardPrefab;
+    public GameObject centralLine;
     public Vector3 leftControllerOffset;
     public Vector3 rightControllerOffset;
     public float waitTimeAfterCalibrationEnds = 30f;
@@ -126,8 +126,7 @@ public class CalibrationManager : Manager<CalibrationManager>
         }
         DisplayInfoText("Calibration started.");
         EventBus.CalibrationStarted.Invoke();
-
-        //MonologueManager.Instance.Play(waitMonologue);
+        centralLine.SetActive(true);
 
         // after both are pressed, wait for 5 seconds
         float passedTime = 0;
@@ -185,7 +184,7 @@ public class CalibrationManager : Manager<CalibrationManager>
         yield return new WaitForSeconds(5f);
         //DisplayInfoText("Diatom lost.\nDiatom found.\nYou are now connected to the\nlabyrinth network. Proceed with caution.", 5f);
         //MonologueManager.Instance.Play(proceedMonologue);
-
+        centralLine.SetActive(false);
         infoText.gameObject.SetActive(false);
         infoText.color = infoTextColor;
 
