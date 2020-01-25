@@ -1,0 +1,42 @@
+newmtl A_Material_u1_v1
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd 3A_u1_v1.jpg
+map_Ka 3A_u1_v1.jpg
+Ni 1.50
+Ks 0.00 0.00 0.00
+Ns 0.00
+newmtl B_Material_u1_v1
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd 3B_u1_v1.jpg
+map_Ka 3B_u1_v1.jpg
+Ni 1.50
+Ks 0.00 0.00 0.00
+Ns 0.00
+newmtl Corredor_3_TX_Corredor_3_TX_Material_u1_v1
+illum 4
+Kd 0.00 0.00 0.00
+Ka 1.00 1.00 1.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.30 0.30 0.30
+Ns 0.00
+newmtl Corredor_3_TX_Material_u1_v1
+illum 4
+Kd 0.00 0.00 0.00
+Ka 1.00 1.00 1.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.30 0.30 0.30
+Ns 0.00
+newmtl initialShadingGroup
+illum 4
+Kd 0.50 0.50 0.50
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
