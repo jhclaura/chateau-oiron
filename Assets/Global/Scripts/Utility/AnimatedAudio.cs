@@ -63,7 +63,7 @@ public class AnimatedAudio : MonoBehaviour
 									m_targetAudio.Stop();
 								else
 									m_targetAudio.Pause();
-                            });                        
+                            });
             }
         }
     }
@@ -122,4 +122,14 @@ public class AnimatedAudio : MonoBehaviour
 		else
     		m_targetAudio.Stop();
 	}
+
+    public void StopWithoutCheck(float fadeTime = 0.3f)
+    {
+        LeanTween.cancel(gameObject);
+        LeanTween.value(gameObject, m_targetAudio.volume, 0f, fadeTime)
+                    .setOnUpdate(CallOnVolumeUpdate)
+                    .setOnComplete(() => {
+                        m_targetAudio.Stop();
+                    });
+    }
 }

@@ -18,6 +18,17 @@ public class MonologueManager : Manager<MonologueManager>
         fadeDelay = new WaitForSeconds(0.55f);
     }
 
+    private void OnEnable()
+    {
+        EventBus.EnteredTranitionStartTrigger.AddListener(HandleEnteredTransitionStartTrigger);
+    }
+
+    private void OnDisable()
+    {
+        EventBus.EnteredTranitionStartTrigger.RemoveListener(HandleEnteredTransitionStartTrigger);
+
+    }
+
     private void Update()
     {
         if (currentMonologueIsPlaying && (Time.time- currentMonologueStartTimestamp>currentMonologueLength))
@@ -75,5 +86,11 @@ public class MonologueManager : Manager<MonologueManager>
 
             currentMonologueIsPlaying = true;
         }
+    }
+
+    void HandleEnteredTransitionStartTrigger(EnvironmentType toEnv)
+    {
+        // stop monologue
+        monolouge.StopWithoutCheck();
     }
 }
