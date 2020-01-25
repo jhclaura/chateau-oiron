@@ -4599,7 +4599,7 @@ MonoBehaviour:
   leftControllerOffset: {x: -0.0095, y: 0.001, z: 0.036}
   rightControllerOffset: {x: 0.0095, y: 0.001, z: 0.036}
   waitTimeAfterCalibrationEnds: 1
-  devMode: 1
+  devMode: 0
   dummyControllerLeft: {fileID: 1424565934}
   dummyControllerRight: {fileID: 580231321}
   smallBallPrefab: {fileID: 5909894051826408190, guid: f20664bfaf36a4e5097600aec5515680,
