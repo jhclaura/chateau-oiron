@@ -13,7 +13,6 @@ public class ChateauSceneManager : Manager<ChateauSceneManager>
 
     [Space(10)]
     public Monologue intro;
-    public Monologue firstDiatom;
     private float introClipLength;
     private float introStartTimestamp;
     private bool introIsPlaying;
@@ -51,7 +50,8 @@ public class ChateauSceneManager : Manager<ChateauSceneManager>
 
     void Start()
     {
-        introClipLength = intro.audioClip.length;
+        //introClipLength = intro.audioClip.length;
+        introClipLength = 27f;
         transitionGroup = transitionGroupObject.GetComponent<TransitionGroup>();
 
         // Enable Opening transition cube ONLY, don't start it yet
@@ -70,8 +70,7 @@ public class ChateauSceneManager : Manager<ChateauSceneManager>
             // intro finishes! manually start the scene => HandleEnterEndTransitionTrigger(currentEnvironment);
             transitionGroup.EndTransition(true, false);
             currentChateauScene.ActivateScene();
-            //transitionGroup.PlayTransitionAudio(currentEnvironment);
-            MonologueManager.Instance.Play(firstDiatom);
+            //MonologueManager.Instance.Play(firstDiatom);    // new first diatom is included in intro
             Invoke("SetStartTransitionTriggerActive", 15f);
         }
     }

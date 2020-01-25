@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: TransitionOfBeetle
   m_EditorClassIdentifier: 
   toEnvironment: 3
-  audioClip: {fileID: 8300000, guid: d9e1ccc0f40b14375a6840a44fc9dd26, type: 3}
+  audioClip: {fileID: 8300000, guid: 127bc20752f084446bce129d1042d54d, type: 3}
   interiorColor: {r: 0, g: 0, b: 0, a: 1}

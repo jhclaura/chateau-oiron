@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: TransitionOfForest
   m_EditorClassIdentifier: 
   toEnvironment: 2
-  audioClip: {fileID: 8300000, guid: 32560edeaca764261ad9fdb50311a81d, type: 3}
-  interiorColor: {r: 0.071288705, g: 0.16981131, b: 0.071288705, a: 1}
+  audioClip: {fileID: 8300000, guid: 7db81c8fdf91e405ca91923571c487ce, type: 3}
+  interiorColor: {r: 0, g: 0, b: 0, a: 1}

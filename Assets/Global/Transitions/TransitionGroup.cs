@@ -83,9 +83,6 @@ public class TransitionGroup : MonoBehaviour
         animatedAudio = monologue.GetComponent<AnimatedAudio>();
 
         Reset();
-
-        // TODO: disable first transition trigger => auto start in ChateauSceneManager
-
     }
 
     // Called by ChateauSceneManager

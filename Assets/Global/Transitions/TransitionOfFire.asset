@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: TransitionOfFire
   m_EditorClassIdentifier: 
   toEnvironment: 1
-  audioClip: {fileID: 8300000, guid: e37d382500df74af491ac2dc1be60e3d, type: 3}
-  interiorColor: {r: 0.11320752, g: 0.035777844, b: 0.035777844, a: 1}
+  audioClip: {fileID: 8300000, guid: c869e37f2c0ef4609b960cd78677f6e1, type: 3}
+  interiorColor: {r: 0, g: 0, b: 0, a: 1}
