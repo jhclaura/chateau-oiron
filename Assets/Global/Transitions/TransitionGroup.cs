@@ -21,8 +21,6 @@ public class TransitionGroup : MonoBehaviour
     public TransitionTrigger endTransitionTrigger;
     public GameObject introWall;
     public GameObject transitionWall;
-    public GameObject turnGraphic;
-    public TMPro.TextMeshPro turnText;
     public TMPro.TextMeshPro frontText;
 
     public Dictionary<EnvironmentType, TransitionScriptableObject> envToTransitionObject = new Dictionary<EnvironmentType, TransitionScriptableObject>();
@@ -138,12 +136,12 @@ public class TransitionGroup : MonoBehaviour
             frontText.text = "Closing starts. Proceed to end it.";
             frontText.color = Color.white;
             frontText.gameObject.SetActive(true);
-            turnText.text = "";
+            //turnText.text = "";
         }
         else
         {
-            if (env != EnvironmentType.Water)
-                turnText.text = "Diatom lost.\nDiatom found.\nYou are now connected to the\nlabyrinth network.\nTurn around and step forward.";
+            //if (env != EnvironmentType.Water)
+            //    turnText.text = "Diatom lost.\nDiatom found.\nYou are now connected to the\nlabyrinth network.\nTurn around and step forward.";
 
             // diatome lost => instead, play animatedAudio from each TransitionObject
             //MonologueManager.Instance.Play(monologue);
@@ -156,8 +154,7 @@ public class TransitionGroup : MonoBehaviour
         if(stopAudio)
             animatedAudio.Stop(true, 0.5f);
 
-        turnGraphic.SetActive(false);
-        turnText.gameObject.SetActive(false);
+        //turnText.gameObject.SetActive(false);
         frontText.gameObject.SetActive(false);
 
         HideTransitionWall();
@@ -304,7 +301,7 @@ public class TransitionGroup : MonoBehaviour
         endTransitionTrigger.gameObject.SetActive(false);   // first scene is triggered automatically by SceneManager
 
         //turnText.gameObject.SetActive(true);
-        turnText.text = "Diatom lost.\nPlease turn around to restart the experience.";
+        //turnText.text = "Diatom lost.\nPlease turn around to restart the experience.";
     }
 
     public void ShowTransitionWall(EnvironmentType env)

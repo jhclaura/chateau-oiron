@@ -738,6 +738,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 524930759}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &524930761 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -8545471575454433561, guid: a601a165acd604a6e8635ed46e17ad3e,
+    type: 3}
+  m_PrefabInstance: {fileID: 524930759}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &596291086
 GameObject:
   m_ObjectHideFlags: 0
@@ -2199,6 +2205,7 @@ MonoBehaviour:
   - {fileID: 625819865}
   sceneObjects:
   - {fileID: 1436401899}
+  - {fileID: 524930761}
 --- !u!1 &1189004469
 GameObject:
   m_ObjectHideFlags: 0
