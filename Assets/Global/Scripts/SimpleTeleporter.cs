@@ -16,6 +16,7 @@ public class SimpleTeleporter : MonoBehaviour
     public GameObject holder;
     public GameObject pointer;
     public bool addRigidBody = false;
+    public OVRScreenFade oVRScreenFade;
     //
     private bool teleportModeOn = false;
     private bool isTeleporting;
@@ -108,7 +109,7 @@ public class SimpleTeleporter : MonoBehaviour
 	public void DoFadeTeleport()
 	{
         isTeleporting = true;
-        EnvironmentManager.Instance.FadeOut(Color.black, 0.3f);
+        FadeOut(Color.black, 0.3f);
 		Invoke ("Teleport", 0.3f);
 	}
 
@@ -119,7 +120,7 @@ public class SimpleTeleporter : MonoBehaviour
 		player.position = dot.transform.position - eyePos;
 
 		dot.SetActive (false);
-        EnvironmentManager.Instance.FadeIn(0.3f);
+        FadeIn(0.3f);
 		Invoke ("Reset", 0.3f);
 	}
 
@@ -127,4 +128,23 @@ public class SimpleTeleporter : MonoBehaviour
 	{
         isTeleporting = false;
 	}
+
+    public void FadeOut(Color fadeColor, float fadeTime = 1f)
+    {
+        if (oVRScreenFade)
+        {
+            oVRScreenFade.fadeColor = fadeColor;
+            oVRScreenFade.fadeTime = fadeTime;
+            oVRScreenFade.FadeOut();
+        }
+    }
+
+    public void FadeIn(float fadeTime = 2f)
+    {
+        if (oVRScreenFade)
+        {
+            oVRScreenFade.fadeTime = fadeTime;
+            StartCoroutine(oVRScreenFade.Fade(1, 0));
+        }
+    }
 }

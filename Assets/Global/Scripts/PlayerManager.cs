@@ -15,7 +15,8 @@ public class PlayerManager : MonoBehaviour
         cameraTransform = Camera.main.transform;
 
 #if UNITY_EDITOR
-        VRPlatformManager.Instance.oculusCenterCamera.transform.localPosition = Vector3.up * 1.8f;
+        if(VRPlatformManager.Instance)
+            VRPlatformManager.Instance.oculusCenterCamera.transform.localPosition = Vector3.up * 1.8f;
 #endif
     }
 

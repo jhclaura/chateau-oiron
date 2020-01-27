@@ -22,6 +22,8 @@ public class TransitionGroup : MonoBehaviour
     public GameObject introWall;
     public GameObject transitionWall;
     public TMPro.TextMeshPro frontText;
+    public Animator titleAnimator;
+    public Animator transitionAnimator;
 
     public Dictionary<EnvironmentType, TransitionScriptableObject> envToTransitionObject = new Dictionary<EnvironmentType, TransitionScriptableObject>();
     public Dictionary<EnvironmentType, TransitionAnchor> envToTransitionAnchor = new Dictionary<EnvironmentType, TransitionAnchor>();
@@ -177,7 +179,7 @@ public class TransitionGroup : MonoBehaviour
             LTDescr tween;
             Debug.Log(currentTransitionToEnv);
             if(currentTransitionToEnv==EnvironmentType.Water)
-                tween = FadeOutTransitionCube(8f, 2.1f);
+                tween = FadeOutTransitionCube(8f, 2.6f);
             else
                 tween = FadeOutTransitionCube();
 
@@ -316,11 +318,14 @@ public class TransitionGroup : MonoBehaviour
                     {
                         introWallMaterial.color = Color.Lerp(introWallMaterial.color, Color.grey, val);
                     });
+            titleAnimator.SetTrigger("IntroFadeIn");
         }
         else
         {
             transitionWall.SetActive(true);
             transitionWallMaterial.color = Color.white;
+            transitionAnimator.gameObject.SetActive(true);
+            transitionAnimator.SetTrigger("FadeIn");
         }
     }
 
@@ -328,7 +333,9 @@ public class TransitionGroup : MonoBehaviour
     {
         if (currentTransitionToEnv == EnvironmentType.Water)
         {
+            titleAnimator.SetTrigger("IntroFadeOut");
             LeanTween.value(introWall, 0f, 1f, 2f)
+                    .setDelay(.5f)
                     .setOnUpdate((float val) =>
                     {
                         introWallMaterial.color = Color.Lerp(introWallMaterial.color, Color.black, val);
@@ -336,11 +343,13 @@ public class TransitionGroup : MonoBehaviour
                     .setOnComplete(()=>
                     {
                         introWall.SetActive(false);
+                        titleAnimator.gameObject.SetActive(false);
                     });
         }
         else
         {
             transitionWall.SetActive(false);
+            transitionAnimator.gameObject.SetActive(false);
         }
     }
 }

@@ -8,12 +8,15 @@ public class Monologue : MonoBehaviour
     public bool updatePosition = true;
     private bool isPlayed;
 
+    public System.Action TriggerIsEntered;
+
     private void OnTriggerEnter(Collider other)
     {
         if (!other.gameObject.CompareTag("Player"))
             return;
 
         Debug.Log("player entered!");
+        TriggerIsEntered?.Invoke();
 
         if (isPlayed && MonologueManager.Instance.monolouge.TargetAudio.clip == audioClip)
         {

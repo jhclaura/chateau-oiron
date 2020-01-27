@@ -148,7 +148,7 @@ public class ChateauSceneManager : Manager<ChateauSceneManager>
         }
         else
         {
-            // turn off transition + fade to black 
+            // END: turn off transition + fade to black 
             transitionGroup.EndTransition(false);
         }
     }
