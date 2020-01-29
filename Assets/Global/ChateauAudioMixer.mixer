@@ -24,7 +24,8 @@ AudioMixerSnapshotController:
   m_AudioMixer: {fileID: 24100000}
   m_SnapshotID: 1ed4f67b0e58b49d29d9acf5b37a7ee9
   m_FloatValues:
-    8e670226d0ef24721a30f552e5e7d8ec: -10
+    8e670226d0ef24721a30f552e5e7d8ec: -12
+    ae5691a75f83d4054b225e9c17559ab9: 5
   m_TransitionOverrides: {}
 --- !u!243 &-1759710386187627890
 AudioMixerGroupController:
@@ -65,7 +66,7 @@ AudioMixerController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: NewAudioMixer
+  m_Name: ChateauAudioMixer
   m_OutputGroup: {fileID: 0}
   m_MasterGroup: {fileID: 24300002}
   m_Snapshots:
@@ -83,7 +84,7 @@ AudioMixerController:
     - e9ac208316bfb4fa8ac9e7c6365f0d1a
     name: View
   m_CurrentViewIndex: 0
-  m_TargetSnapshot: {fileID: 24500006}
+  m_TargetSnapshot: {fileID: -3368147906564781969}
 --- !u!243 &24300002
 AudioMixerGroupController:
   m_ObjectHideFlags: 0
@@ -128,7 +129,8 @@ AudioMixerSnapshotController:
   m_Name: SnapshotNormal
   m_AudioMixer: {fileID: 24100000}
   m_SnapshotID: 176c6ee314f854a1aa757f16c38f8021
-  m_FloatValues: {}
+  m_FloatValues:
+    ae5691a75f83d4054b225e9c17559ab9: 5
   m_TransitionOverrides: {}
 --- !u!243 &4951520521853773654
 AudioMixerGroupController:

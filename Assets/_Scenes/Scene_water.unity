@@ -3634,7 +3634,7 @@ PrefabInstance:
     - target: {fileID: 93232362178686750, guid: dd1372ac51f6f4edabc93e730f0d21b8,
         type: 3}
       propertyPath: MaxDistance
-      value: 60
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd1372ac51f6f4edabc93e730f0d21b8, type: 3}
