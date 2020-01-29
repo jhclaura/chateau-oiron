@@ -4,22 +4,21 @@ using UnityEngine;
 
 public class MascotFire : MonoBehaviour
 {
+    public Mascot mascot;
     public Monologue triggerShowMonologue;
     public Monologue triggerHideMonologue;
     public SpriteRenderer[] spriteRenderers;
-
-    private Animator animator;
 
     void Start()
     {
         triggerShowMonologue.TriggerIsEntered += HandleTriggerShowIsEntered;
         triggerHideMonologue.TriggerIsEntered += HandleTriggerHideIsEntered;
-        animator = GetComponent<Animator>();
     }
 
     void HandleTriggerShowIsEntered()
     {
-        animator.enabled = true;
+        mascot.TriggerAnimation("StartWalking");
+        mascot.mascotAnimator.SetFloat("LegMove", 1f);
     }
 
     void HandleTriggerHideIsEntered()
@@ -33,10 +32,11 @@ public class MascotFire : MonoBehaviour
                 {
                     s.color = Color.Lerp(s.color, clearColor, val);
                 }
+                mascot.mascotAudioSource.volume = 1f - val;
             })
             .setOnComplete(()=>
             {
-                animator.enabled = false;
+                mascot.mascotAnimator.enabled = false;
             });
     }
 }

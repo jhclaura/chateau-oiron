@@ -139,6 +139,7 @@ ScriptedImporter:
   importedTextureHeight: 256
   documentSize: {x: 512, y: 256}
   paperDollMode: 0
+  keepDupilcateSpriteName: 0
   spriteCategoryList:
     categories: []
   textureActualWidth: 512
@@ -171,4 +172,4 @@ ScriptedImporter:
   generateGOHierarchy: 0
   textureAssetName: UIs
   prefabAssetName: UIs_GO
-  spriteLibAssetName: 
+  spriteLibAssetName: UIs Sprite Lib
