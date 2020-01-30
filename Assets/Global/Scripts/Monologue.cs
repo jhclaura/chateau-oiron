@@ -9,6 +9,7 @@ public class Monologue : MonoBehaviour
     private bool isPlayed;
 
     public System.Action TriggerIsEntered;
+    public System.Action TriggerIsExited;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -34,6 +35,8 @@ public class Monologue : MonoBehaviour
         if (isPlayed && MonologueManager.Instance.monolouge.TargetAudio.clip==audioClip)
         {
             MonologueManager.Instance.Pause();
+            Debug.Log("player exited!");
+            TriggerIsExited?.Invoke();
         }
     }
 }
