@@ -9,6 +9,9 @@ public class MascotFire : MonoBehaviour
     public Monologue triggerHideMonologue;
     public SpriteRenderer[] spriteRenderers;
 
+    private bool startedFirstWalk;
+    private bool startedSecondWalk;
+
     void Start()
     {
         triggerShowMonologue.TriggerIsEntered += HandleTriggerShowIsEntered;
@@ -17,10 +20,16 @@ public class MascotFire : MonoBehaviour
 
     void HandleTriggerShowIsEntered()
     {
-        mascot.TriggerAnimation("StartWalking");
-        mascot.mascotAnimator.SetFloat("LegMove", 1f);
+        if (!startedFirstWalk)
+        {
+            startedFirstWalk = true;
+            //mascot.TriggerAnimation("StartWalking");
+            mascot.mascotAnimator.SetTrigger("StartWalking");   // walk without sound
+            mascot.mascotAnimator.SetFloat("LegMove", 1f);
+        }
     }
 
+    /*
     void HandleTriggerHideIsEntered()
     {
         Color clearColor = spriteRenderers[0].color;
@@ -38,5 +47,15 @@ public class MascotFire : MonoBehaviour
             {
                 mascot.mascotAnimator.enabled = false;
             });
+    }
+    */
+
+    void HandleTriggerHideIsEntered()
+    {
+        if (!startedSecondWalk)
+        {
+            startedSecondWalk = true;
+            mascot.TriggerAnimation("ContinueWalking"); // leave with sound
+        }
     }
 }

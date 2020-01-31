@@ -1580,6 +1580,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 639643530}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &639643532 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3272773616344039641, guid: 882cc5c35f58a45288f24279fe94b977,
+    type: 3}
+  m_PrefabInstance: {fileID: 639643530}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d16f5c25f57a4585ac4673bd3baa015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &682711314
 GameObject:
   m_ObjectHideFlags: 0
@@ -8787,18 +8799,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1870524145}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1870524147 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3272773616344039641, guid: 882cc5c35f58a45288f24279fe94b977,
-    type: 3}
-  m_PrefabInstance: {fileID: 1870524145}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d16f5c25f57a4585ac4673bd3baa015, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1922940052
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9543,8 +9543,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mascot: {fileID: 1922940059}
-  triggerShowMonologue: {fileID: 917716248}
-  triggerHideMonologue: {fileID: 1870524147}
+  triggerShowMonologue: {fileID: 639643532}
+  triggerHideMonologue: {fileID: 917716248}
   spriteRenderers:
   - {fileID: 1922940058}
   - {fileID: 1922940057}
@@ -9574,6 +9574,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mascotAnimator: {fileID: 1922940055}
   mascotAudioSource: {fileID: 1922940060}
+  fadeUseSprite: 0
+  fadeUseMaterial: 0
+  spriteRenderers: []
+  material: {fileID: 0}
 --- !u!82 &1922940060
 AudioSource:
   m_ObjectHideFlags: 0

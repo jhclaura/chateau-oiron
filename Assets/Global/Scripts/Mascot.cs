@@ -16,6 +16,16 @@ public class Mascot : MonoBehaviour
     [ShowIf("fadeUseMaterial")]
     public Material material;
 
+    public bool pauseAudioWhenLegsStop;
+    private AnimatedAudio animatedAudio;
+    private int legTweenId = -1;
+    private int fadeTweenId = -1;
+
+    private void Start()
+    {
+        animatedAudio = GetComponent<AnimatedAudio>();
+    }
+
     public void EnableAnimation()
     {
         mascotAnimator.enabled = true;
@@ -30,49 +40,58 @@ public class Mascot : MonoBehaviour
 
     public void MoveLeg(float transitionTime=0.2f)
     {
-        LeanTween.value(gameObject, 0f, 1f, transitionTime)
+        LeanTween.value(0f, 1f, transitionTime)
             .setOnUpdate((float val) =>
             {
                 mascotAnimator.SetFloat("LegMove", val);
             });
+
+        if (pauseAudioWhenLegsStop) animatedAudio.Toggle(true, 1f, .2f, 0f);
     }
 
     public void StopLeg(float transitionTime=0.2f)
     {
-        LeanTween.value(gameObject, 1f, 0f, transitionTime)
+        LeanTween.value(1f, 0f, transitionTime)
             .setOnUpdate((float val) =>
             {
                 mascotAnimator.SetFloat("LegMove", val);
             });
+
+        if (pauseAudioWhenLegsStop) animatedAudio.Toggle(false, 0f, .2f, 0f);
     }
 
     public void FadeIn()
     {
         Debug.Log("mascot fade in");
-        LeanTween.cancel(gameObject);
+        if (LeanTween.isTweening(fadeTweenId))
+        {
+            LeanTween.cancel(fadeTweenId);
+            fadeTweenId = -1;
+        }
+
         if (fadeUseSprite)
         {
             Color targetColor = spriteRenderers[0].color;
             targetColor.a = 1f;
 
-            LeanTween.value(gameObject, 0f, 1f, 2f)
+            fadeTweenId =  LeanTween.value(gameObject, 0f, 1f, 2f)
             .setOnUpdate((float val) =>
             {
                 foreach (SpriteRenderer s in spriteRenderers)
                 {
                     s.color = Color.Lerp(s.color, targetColor, val);
                 }
-            });
+            }).id;
         }
         else if (fadeUseMaterial)
         {
             Color targetColor = material.color;
             targetColor.a = 1f;
-            LeanTween.value(gameObject, 0f, 1f, 2f)
+            fadeTweenId = LeanTween.value(gameObject, 0f, 1f, 2f)
             .setOnUpdate((float val) =>
             {
                 material.color = Color.Lerp(material.color, targetColor, val);
-            });
+            }).id;
         }
     }
 
@@ -80,13 +99,18 @@ public class Mascot : MonoBehaviour
     {
         Debug.Log("mascot fade out");
 
-        LeanTween.cancel(gameObject);
+        if (LeanTween.isTweening(fadeTweenId))
+        {
+            LeanTween.cancel(fadeTweenId);
+            fadeTweenId = -1;
+        }
+
         if (fadeUseSprite)
         {
             Color targetColor = spriteRenderers[0].color;
             targetColor.a = 0f;
 
-            LeanTween.value(gameObject, 0f, 1f, 2f)
+            fadeTweenId = LeanTween.value(gameObject, 0f, 1f, 2f)
             .setOnUpdate((float val) =>
             {
                 foreach (SpriteRenderer s in spriteRenderers)
@@ -97,13 +121,13 @@ public class Mascot : MonoBehaviour
             .setOnComplete(()=> {
                 if (disableAnimation)
                     mascotAnimator.enabled = false;
-            });
+            }).id;
         }
         else if(fadeUseMaterial)
         {
             Color targetColor = material.color;
             targetColor.a = 0f;
-            LeanTween.value(gameObject, 0f, 1f, 2f)
+            fadeTweenId = LeanTween.value(gameObject, 0f, 1f, 2f)
             .setOnUpdate((float val) =>
             {
                 material.color = Color.Lerp(material.color, targetColor, val);
@@ -111,7 +135,7 @@ public class Mascot : MonoBehaviour
             .setOnComplete(() => {
                 if (disableAnimation)
                     mascotAnimator.enabled = false;
-            });
+            }).id;
         }        
     }
 
