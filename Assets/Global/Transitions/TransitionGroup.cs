@@ -34,17 +34,20 @@ public class TransitionGroup : MonoBehaviour
     private Material transitionWallMaterial;
     private IEnumerator duringTransitionCoroutine;
     private AnimatedAudio animatedAudio;
+    private GameObject waterFrontWall;
 
     private void OnEnable()
     {
         startTransitionTrigger.OnEnterTrigger += HandleEnterStartTransitionTrigger;
         endTransitionTrigger.OnEnterTrigger += HandleEnterEndTransitionTrigger;
+        EventBus.StartExperienceTriggered.AddListener(HandleStartExperienceTriggered);
     }
 
     private void OnDisable()
     {
         startTransitionTrigger.OnEnterTrigger -= HandleEnterStartTransitionTrigger;
         endTransitionTrigger.OnEnterTrigger -= HandleEnterEndTransitionTrigger;
+        EventBus.StartExperienceTriggered.RemoveListener(HandleStartExperienceTriggered);
     }
 
     void Awake()
@@ -83,6 +86,12 @@ public class TransitionGroup : MonoBehaviour
         animatedAudio = monologue.GetComponent<AnimatedAudio>();
 
         Reset();
+    }
+
+    private void HandleStartExperienceTriggered()
+    {
+        WaterScene waterScene = FindObjectOfType<WaterScene>();
+        waterFrontWall = waterScene.frontWall;
     }
 
     // Called by ChateauSceneManager
@@ -344,6 +353,7 @@ public class TransitionGroup : MonoBehaviour
                     {
                         introWall.SetActive(false);
                         titleAnimator.gameObject.SetActive(false);
+                        waterFrontWall.SetActive(true);
                     });
         }
         else
