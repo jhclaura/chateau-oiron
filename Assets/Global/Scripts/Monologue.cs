@@ -7,6 +7,7 @@ public class Monologue : MonoBehaviour
     public AudioClip audioClip;
     public bool updatePosition = true;
     private bool isPlayed;
+    private bool isFinished;
 
     public System.Action TriggerIsEntered;
     public System.Action TriggerIsExited;
@@ -18,6 +19,9 @@ public class Monologue : MonoBehaviour
 
         Debug.Log("player entered!");
         TriggerIsEntered?.Invoke();
+
+        if (isFinished)
+            return;
 
         if (isPlayed && MonologueManager.Instance.monolouge.TargetAudio.clip == audioClip)
         {
@@ -38,5 +42,10 @@ public class Monologue : MonoBehaviour
             Debug.Log("player exited!");
             TriggerIsExited?.Invoke();
         }
+    }
+
+    public void Finished()
+    {
+        isFinished = true;
     }
 }

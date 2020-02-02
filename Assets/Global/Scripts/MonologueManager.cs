@@ -12,6 +12,7 @@ public class MonologueManager : Manager<MonologueManager>
     private float currentMonologueLength;
     private float currentMonologueStartTimestamp;
     private bool currentMonologueIsPlaying;
+    private Monologue currentMonologue;
 
     void Start()
     {
@@ -34,6 +35,8 @@ public class MonologueManager : Manager<MonologueManager>
         if (currentMonologueIsPlaying && (Time.time- currentMonologueStartTimestamp>currentMonologueLength))
         {
             currentMonologueIsPlaying = false;
+            currentMonologue.Finished();
+            EventBus.MonologueEnded.Invoke();
             normalSnapShot.TransitionTo(1.5f);
         }
     }
@@ -59,6 +62,7 @@ public class MonologueManager : Manager<MonologueManager>
         currentMonologueIsPlaying = true;
         currentMonologueStartTimestamp = Time.time;
         currentMonologueLength = newMonologue.audioClip.length;
+        currentMonologue = newMonologue;
 
         monolouge.Toggle(true, 1, 1f, 0f);
     }
