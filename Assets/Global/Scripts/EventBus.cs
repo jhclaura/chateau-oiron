@@ -23,4 +23,5 @@ public class EventBus
     public static EnvEvent EnteredTranitionEndTrigger = new EnvEvent();
     public static UnityEvent TransitionStarted = new UnityEvent();
     public static UnityEvent TransitionEnded = new UnityEvent();
+    public static UnityEvent MonologueEnded = new UnityEvent();
 }
