@@ -6,6 +6,7 @@ public class ChateauScene : MonoBehaviour
 {
     public System.Action SceneStarted;
 
+    public bool deactivateSceneAtStart = true;
     public Transform startPoint;
     [Space(10)]
     public AnimatedAudio[] aniAudios;
@@ -14,7 +15,8 @@ public class ChateauScene : MonoBehaviour
 
     private void Awake()
     {
-        DeactivateScene();
+        if(deactivateSceneAtStart)
+            DeactivateScene();
     }
 
     public void UpdateTransformWithAnchor(Transform referenceStartAnchor)

@@ -1,0 +1,20 @@
+newmtl Part_1A_Material_u1_v1
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Part_1A_u1_v1.jpg
+map_Ka Part_1A_u1_v1.jpg
+Ni 1.50
+Ks 0.00 0.00 0.00
+Ns 0.00
+newmtl Part_1B_Material_u1_v1
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Part_1B_u1_v1.jpg
+map_Ka Part_1B_u1_v1.jpg
+Ni 1.50
+Ks 0.00 0.00 0.00
+Ns 0.00

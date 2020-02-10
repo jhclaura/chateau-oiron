@@ -11,7 +11,8 @@ public enum EnvironmentType
     Fire,
     Forest,
     Beetle,
-    End
+    End,
+    Intro,
 }
 
 [System.Serializable]
