@@ -80,7 +80,8 @@ namespace Film
         public void HandleTitleFadeOut()
         {
             introWall.SetActive(true);
-            LeanTween.value(introWall, 0f, 1f, 2f)
+            LeanTween.value(introWall, 0f, 1f, 3f)
+                    .setEaseInOutQuad()
                     .setOnUpdate((float val) =>
                     {
                         introWallMaterial.color = Color.Lerp(introWallMaterial.color, Color.white, val);
