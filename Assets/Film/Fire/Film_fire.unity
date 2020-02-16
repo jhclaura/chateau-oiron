@@ -7382,14 +7382,13 @@ GameObject:
   m_Component:
   - component: {fileID: 1001744216}
   - component: {fileID: 1001744217}
-  - component: {fileID: 1001744218}
   m_Layer: 0
   m_Name: Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1001744216
 Transform:
   m_ObjectHideFlags: 0
@@ -7441,19 +7440,6 @@ MonoBehaviour:
   aniLights:
   - {fileID: 848255843}
   sceneObjects: []
---- !u!114 &1001744218
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1001744215}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 047ef133befb2417392728c8ff85e15d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mascot: {fileID: 0}
 --- !u!1 &1022925182
 GameObject:
   m_ObjectHideFlags: 0
@@ -8367,7 +8353,12 @@ PrefabInstance:
     - target: {fileID: 8099266824214703247, guid: e192046663c5b42c5a577f1cd2fbeb39,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 820644786639111971, guid: e192046663c5b42c5a577f1cd2fbeb39,
+        type: 3}
+      propertyPath: NumberOfFramesToRender
+      value: 3800
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e192046663c5b42c5a577f1cd2fbeb39, type: 3}

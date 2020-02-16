@@ -3887,6 +3887,11 @@ PrefabInstance:
       propertyPath: field of view
       value: 70
       objectReference: {fileID: 0}
+    - target: {fileID: 820644786639111971, guid: e192046663c5b42c5a577f1cd2fbeb39,
+        type: 3}
+      propertyPath: NumberOfFramesToRender
+      value: 3080
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e192046663c5b42c5a577f1cd2fbeb39, type: 3}
 --- !u!4 &765686747 stripped
